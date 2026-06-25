@@ -97,10 +97,10 @@
 
         <div id="content" class="panel">
             <h2>Website Content</h2>
-            <div class="form-group"><label>Hero Title (e.g. PORTFOLIO)</label><input type="text" id="hero-title"></div>
+            <div class="form-group"><label>Hero Title</label><input type="text" id="hero-title"></div>
             <div class="form-group"><label>Hero Description</label><textarea id="hero-desc"></textarea></div>
             <div class="form-group"><label>About Bio</label><textarea id="about-bio"></textarea></div>
-            <div class="form-group"><label>About Avatar Image URL</label><input type="text" id="about-avatar"></div>
+            <div class="form-group"><label>About Avatar URL</label><input type="text" id="about-avatar"></div>
             <button class="save-btn" onclick="updateWebsiteContent()">Save Content</button>
         </div>
 
@@ -113,11 +113,11 @@
                 <textarea id="portfolio-json" style="font-family: monospace; min-height: 150px;"></textarea>
             </div>
             <div class="form-group">
-                <label>Process Steps Array</label>
+                <label>Process Steps Array (OUR PROCESS)</label>
                 <textarea id="process-json" style="font-family: monospace; min-height: 150px;"></textarea>
             </div>
             <div class="form-group">
-                <label>Features Array (Why Choose Me)</label>
+                <label>Features Array (WHY CHOOSE ME)</label>
                 <textarea id="features-json" style="font-family: monospace; min-height: 150px;"></textarea>
             </div>
             <div class="form-group">
@@ -177,17 +177,17 @@
 
         function populateForms() {
             if(!adminData.hero) return;
-            document.getElementById('stat-proj').innerText = adminData.portfolio.length;
+            document.getElementById('stat-proj').innerText = adminData.portfolio ? adminData.portfolio.length : 0;
             
             document.getElementById('hero-title').value = adminData.hero.title;
             document.getElementById('hero-desc').value = adminData.hero.description;
             document.getElementById('about-bio').value = adminData.about.bio;
             document.getElementById('about-avatar').value = adminData.about.avatar || '';
             
-            document.getElementById('portfolio-json').value = JSON.stringify(adminData.portfolio, null, 2);
-            document.getElementById('process-json').value = JSON.stringify(adminData.process, null, 2);
-            document.getElementById('features-json').value = JSON.stringify(adminData.features, null, 2);
-            document.getElementById('testimonials-json').value = JSON.stringify(adminData.testimonials, null, 2);
+            document.getElementById('portfolio-json').value = JSON.stringify(adminData.portfolio || [], null, 2);
+            document.getElementById('process-json').value = JSON.stringify(adminData.process_steps || [], null, 2);
+            document.getElementById('features-json').value = JSON.stringify(adminData.why_choose_me || [], null, 2);
+            document.getElementById('testimonials-json').value = JSON.stringify(adminData.testimonials || [], null, 2);
             
             document.getElementById('social-discord').value = adminData.social.discord || '';
             document.getElementById('social-instagram').value = adminData.social.instagram || '';
@@ -251,8 +251,8 @@
         function updateSections() {
             try {
                 adminData.portfolio = JSON.parse(document.getElementById('portfolio-json').value);
-                adminData.process = JSON.parse(document.getElementById('process-json').value);
-                adminData.features = JSON.parse(document.getElementById('features-json').value);
+                adminData.process_steps = JSON.parse(document.getElementById('process-json').value);
+                adminData.why_choose_me = JSON.parse(document.getElementById('features-json').value);
                 adminData.testimonials = JSON.parse(document.getElementById('testimonials-json').value);
                 
                 document.getElementById('stat-proj').innerText = adminData.portfolio.length;

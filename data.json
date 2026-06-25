@@ -1,10 +1,10 @@
 {
   "theme": {
-    "backgroundColor": "#e6e4dc",
-    "accentColor": "#617a44",
+    "backgroundColor": "#e3e1d9",
+    "accentColor": "#7c9458",
     "textColor": "#1a1a1a",
     "cardColor": "#ffffff",
-    "featureColor": "#e1f0d3"
+    "featureColor": "#e8f4dd"
   },
   "hero": {
     "title": "PORTFOLIO",
@@ -15,33 +15,28 @@
   "about": {
     "bio": "Hey! I'm Sarthak, a thumbnail designer who loves turning ideas into scroll-stopping visuals.\nI design YouTube thumbnails that are clean, clickable, and built to perform.",
     "tools": ["Ps", "Ai", "Ae", "Pr"],
-    "avatar": "https://placehold.co/400x500/617a44/fff?text=Your+Avatar+Here"
+    "avatar": "https://placehold.co/400x500/7c9458/fff?text=Avatar"
   },
-  "process": [
-    { "step": "STEP-01", "desc": "I start by analyzing top performing thumbnails in your niche to understand what works.", "image": "https://placehold.co/400x250/617a44/fff?text=Analysis" },
-    { "step": "STEP-02", "desc": "I create a rough sketch to plan the layout and message.", "image": "https://placehold.co/400x250/617a44/fff?text=Sketching" },
-    { "step": "STEP-03", "desc": "I design the thumbnail with high-contrast visuals and clean effects for maximum clicks.", "image": "https://placehold.co/400x250/617a44/fff?text=Final+Design" }
+  "why_choose_me": [
+    { "id": 1, "title": "A/B Testing Ready", "description": "Multiple versions to test which works.", "icon": "lightning", "color": "#e8f4dd", "enabled": true, "order": 1, "createdAt": "", "updatedAt": "" },
+    { "id": 2, "title": "Unlimited Revisions", "description": "Until you're 100% satisfied with the result.", "icon": "badge", "color": "#e8f4dd", "enabled": true, "order": 2, "createdAt": "", "updatedAt": "" },
+    { "id": 3, "title": "24-48Hr Delivery", "description": "Fast turnaround without sacrificing quality.", "icon": "clock", "color": "#e8f4dd", "enabled": true, "order": 3, "createdAt": "", "updatedAt": "" },
+    { "id": 4, "title": "High-CTR Thumbnails", "description": "Designed to maximize clicks and watch time.", "icon": "cursor", "color": "#e8f4dd", "enabled": true, "order": 4, "createdAt": "", "updatedAt": "" }
   ],
-  "features": [
-    { "title": "A/B Testing Ready", "desc": "Multiple versions to test which works.", "icon": "lightning" },
-    { "title": "Unlimited Revisions", "desc": "Until you're 100% satisfied with the result.", "icon": "badge" },
-    { "title": "24-48hr Delivery", "desc": "Fast turnaround without sacrificing quality.", "icon": "clock" },
-    { "title": "High-CTR Thumbnails", "desc": "Designed to maximize clicks and watch time.", "icon": "cursor" }
+  "process_steps": [
+    { "id": 1, "stepNumber": "STEP-01", "title": "Understanding Your Content", "description": "I analyze your content, niche, audience, and competitors to understand what attracts viewers and drives clicks.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+1", "imageCaption": "Analysis", "imageAlt": "Analysis Step", "enabled": true, "order": 1, "createdAt": "", "updatedAt": "" },
+    { "id": 2, "stepNumber": "STEP-02", "title": "Concept & Layout Planning", "description": "I create a visual concept, plan the composition, text hierarchy, focal points, and thumbnail strategy.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+2", "imageCaption": "Planning", "imageAlt": "Planning Step", "enabled": true, "order": 2, "createdAt": "", "updatedAt": "" },
+    { "id": 3, "stepNumber": "STEP-03", "title": "Final Thumbnail Creation", "description": "I design the final thumbnail with strong contrast, storytelling, visual hooks, and CTR-focused elements.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+3", "imageCaption": "Final Design", "imageAlt": "Final Step", "enabled": true, "order": 3, "createdAt": "", "updatedAt": "" }
   ],
   "services": [
-    { "title": "Thumbnail Design", "desc": "High-CTR, attention-grabbing thumbnails engineered for the YouTube algorithm." },
-    { "title": "Stream Assets", "desc": "Custom overlays, alerts, and branding packages to elevate your live streams." },
-    { "title": "Discord Development", "desc": "Professional server setup, custom bot integration, and community structuring." }
+    { "title": "Thumbnail Design", "desc": "High-CTR, attention-grabbing thumbnails engineered for the YouTube algorithm." }
   ],
   "portfolio": [
     { "id": 1, "title": "Doma Live New Year", "category": "BGMI", "image": "https://placehold.co/800x450/111/fff?text=Doma+Live" },
-    { "id": 2, "title": "Rani Priya Invites", "category": "Documentary", "image": "https://placehold.co/800x450/111/fff?text=Wedding" },
-    { "id": 3, "title": "Tech Review Concept", "category": "Tech", "image": "https://placehold.co/800x450/111/fff?text=Tech" },
-    { "id": 4, "title": "AI Portrait Generation", "category": "AI", "image": "https://placehold.co/800x450/111/fff?text=AI+Artwork" }
+    { "id": 2, "title": "Rani Priya Invites", "category": "Documentary", "image": "https://placehold.co/800x450/111/fff?text=Wedding" }
   ],
   "testimonials": [
-    { "name": "Aman", "text": "Really impressed with the gaming thumbnails. very eye-catching, clean, and professional. perfect for bgmi and other games" },
-    { "name": "Ammy", "text": "High-quality gaming thumbnails that truly stand out. clean design, great colours and they looks very professional" }
+    { "name": "Aman", "text": "Really impressed with the gaming thumbnails. very eye-catching, clean, and professional." }
   ],
   "social": {
     "instagram": "https://instagram.com/",
