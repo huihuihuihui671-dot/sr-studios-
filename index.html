@@ -14,6 +14,7 @@
         <div class="preloader-counter">0%</div>
         <div class="preloader-text">SR STUDIOS</div>
     </div>
+
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
@@ -21,9 +22,8 @@
         <div class="logo magnetic">SR STUDIOS.</div>
         <ul class="nav-links">
             <li><a href="#about" class="magnetic">About</a></li>
-            <li><a href="#services" class="magnetic">Services</a></li>
-            <li><a href="#portfolio" class="magnetic">Work</a></li>
             <li><a href="#discord" class="magnetic">Discord</a></li>
+            <li><a href="#portfolio" class="magnetic">Work</a></li>
         </ul>
         <a href="#contact" class="btn primary magnetic">Hire Me</a>
     </nav>
@@ -42,18 +42,46 @@
             </div>
         </div>
     </section>
+
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="about-text fade-in">
+                <h2 class="section-title">The Creator</h2>
+                <p class="about-desc">I am <strong>UK (Sarthak Raj)</strong>, a versatile Graphic Designer, Discord Developer, and Community Builder. I specialize in crafting high-conversion thumbnails, professional stream assets, and highly automated Discord servers for top-tier creators.</p>
+                
+                <div class="skills-grid">
+                    <div class="skill-tag">Graphic Design</div>
+                    <div class="skill-tag">Thumbnail Strategy</div>
+                    <div class="skill-tag">Discord Bot Dev</div>
+                    <div class="skill-tag">Community Management</div>
+                    <div class="skill-tag">Stream Overlays</div>
+                </div>
+            </div>
+            <div class="about-stats fade-in">
+                <div class="stat-box">
+                    <h3>100+</h3>
+                    <p>Thumbnails Created</p>
+                </div>
+                <div class="stat-box">
+                    <h3>50+</h3>
+                    <p>Servers Managed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="discord" class="discord-section">
         <div class="discord-container">
-            <div class="discord-header">
+            <div class="discord-header fade-in">
                 <h2 class="section-title">Community & Discord</h2>
                 <p>Building high-engagement communities and custom bots for creators.</p>
                 <a href="https://discord.gg/yourlink" target="_blank" class="btn primary magnetic discord-btn">
-                    <img src="assets/icons/discord-logo.svg" alt="Discord" class="btn-icon"> Connect on Discord
+                    Connect on Discord
                 </a>
             </div>
 
             <div class="discord-grid">
-                <div class="discord-card magnetic">
+                <div class="discord-card magnetic fade-in">
                     <div class="card-glow"></div>
                     <h3>Doma Live Community</h3>
                     <p>Designed and structured the official streaming server for maximum engagement and clean verification flows.</p>
@@ -63,7 +91,7 @@
                     </div>
                 </div>
 
-                <div class="discord-card magnetic">
+                <div class="discord-card magnetic fade-in">
                     <div class="card-glow"></div>
                     <h3>BGMI Scrims Bot</h3>
                     <p>Developed a custom Discord bot to automate BGMI scrim registrations, slot lists, and automated point calculations.</p>
@@ -76,9 +104,9 @@
     </section>
 
     <section id="portfolio" class="portfolio">
-        <h2 class="section-title">Selected Work</h2>
+        <h2 class="section-title fade-in">Selected Work</h2>
         
-        <div class="portfolio-filters">
+        <div class="portfolio-filters fade-in">
             <button class="filter-btn active" data-filter="all">All</button>
             <button class="filter-btn" data-filter="thumbnails">Thumbnails</button>
             <button class="filter-btn" data-filter="overlays">Overlays</button>
@@ -88,6 +116,30 @@
         <div class="portfolio-grid" id="portfolio-grid">
             </div>
     </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-container fade-in">
+            <h2 class="section-title">Let's Work Together</h2>
+            <p>Ready to upgrade your visuals or Discord community? Drop me a message.</p>
+            
+            <form id="contactForm" class="contact-form">
+                <div class="input-group">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Your Email" required>
+                </div>
+                <div class="input-group">
+                    <textarea id="message" rows="5" placeholder="Tell me about your project..." required></textarea>
+                </div>
+                <button type="submit" class="btn primary magnetic form-submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 SR STUDIOS. Designed & Developed by UK.</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
