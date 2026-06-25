@@ -3,138 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR STUDIOS | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>SR STUDIOS | Sarthak Raj</title>
     <style>
+        /* Base & Theme */
         :root {
-            --bg: #e6e2d6;
-            --accent: #658345;
-            --text: #1c1c1c;
+            --bg: #e6e4dc; 
+            --accent: #617a44; 
+            --text: #1a1a1a; 
             --card: #ffffff;
-            --font-head: 'Oswald', sans-serif;
-            --font-body: 'Inter', sans-serif;
-            --transition: 0.3s ease;
+            --font-main: 'Segoe UI', system-ui, sans-serif;
+            --font-display: 'Impact', 'Arial Black', sans-serif;
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font-body); overflow-x: hidden; position: relative; }
+        body { background-color: var(--bg); color: var(--text); font-family: var(--font-main); overflow-x: hidden; position: relative; }
         a { text-decoration: none; color: inherit; }
-
-        /* Custom Cursor */
-        #cursor-dot { width: 8px; height: 8px; background: var(--text); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.1s; }
-        #cursor-ring { width: 40px; height: 40px; border: 2px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
-        .hover-target:hover ~ #cursor-ring { width: 60px; height: 60px; background: rgba(101, 131, 69, 0.1); }
-
-        /* Navigation */
-        nav {
-            position: fixed; top: 0; width: 100%; z-index: 100;
-            background-color: var(--bg);
-            border-top: 3px solid var(--accent);
-            border-bottom: 3px solid var(--accent);
-            display: flex; align-items: stretch;
-            height: 80px;
-        }
-        .nav-brand {
-            padding: 0 30px; display: flex; flex-direction: column; justify-content: center;
-            border-right: 2px dashed var(--accent);
-        }
-        .nav-brand h1 { font-family: var(--font-head); font-size: 2rem; line-height: 1.1; text-transform: uppercase; }
-        .nav-brand span { font-size: 0.85rem; color: #555; }
-        .nav-links { display: flex; flex: 1; align-items: stretch; }
-        .nav-link {
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-head); font-size: 1.2rem; text-transform: uppercase;
-            border-right: 2px dashed var(--accent); transition: var(--transition);
-        }
-        .nav-link:last-child { border-right: none; }
-        .nav-link:hover { background: var(--accent); color: var(--bg); }
-        .btn-collab {
-            background: var(--text); color: var(--bg); padding: 0 30px; border: none;
-            font-family: var(--font-head); font-size: 1.2rem; text-transform: uppercase;
-            transition: var(--transition); pointer-events: auto;
-        }
-        .btn-collab:hover { background: var(--accent); }
-
-        /* Container */
-        .container { max-width: 1300px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 10; }
-        section { padding: 150px 0; position: relative; }
-
-        /* Doodles */
-        .doodle { position: absolute; z-index: 0; pointer-events: none; }
-        .d-dashed { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 8 8; fill: none; }
-        .d-solid { stroke: var(--accent); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-        .d-fill { fill: var(--accent); }
         
-        .hero-dashed-path { top: 20%; left: 0; width: 100%; height: 60%; }
-        .hero-star-1 { top: 15%; left: 10%; width: 40px; animation: float 4s ease-in-out infinite; }
-        .hero-star-2 { bottom: 20%; left: 15%; width: 30px; animation: float 5s ease-in-out infinite reverse; }
-        .hero-heart { bottom: 15%; right: 30%; width: 40px; animation: float 4s ease-in-out infinite; }
-        .hero-blob { bottom: -10%; right: -5%; width: 250px; opacity: 0.8; }
-        .about-scribble { top: 0; right: 10%; width: 150px; }
+        /* Custom Cursor */
+        #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.1s; }
+        #cursor-ring { width: 40px; height: 40px; border: 2px solid var(--text); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.15s ease-out; }
+        .hover-target:hover ~ #cursor-ring { width: 60px; height: 60px; background: rgba(97, 122, 68, 0.1); border-color: var(--accent); }
+
+        /* Loader */
+        #loader { position: fixed; inset: 0; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; z-index: 10000; transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); }
+        .loader-text { font-family: var(--font-display); font-size: 4rem; letter-spacing: 2px; animation: pulse 1.5s infinite; color: var(--text); }
+        
+        /* Doodles & Background Elements */
+        .doodle-layer { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .d-path { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 8 8; }
+        .d-solid-path { fill: none; stroke: var(--text); stroke-width: 3; stroke-linecap: round; }
+        .d-star { fill: var(--accent); }
+        .d-heart { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+        .d-dot { fill: var(--accent); }
+        .float-anim { animation: floatDoodle 6s ease-in-out infinite; }
+        .float-anim-alt { animation: floatDoodleAlt 7s ease-in-out infinite reverse; }
+
+        @keyframes floatDoodle { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+        @keyframes floatDoodleAlt { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(15px) rotate(-5deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.95); } }
+
+        /* Layout & Typography */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 1; }
+        section { padding: 120px 0; position: relative; }
+        
+        h1 { font-family: var(--font-display); font-size: clamp(5rem, 15vw, 12rem); font-weight: normal; line-height: 0.9; text-transform: uppercase; margin-bottom: 10px; color: var(--text); letter-spacing: -2px; }
+        h2 { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5rem); font-weight: normal; margin-bottom: 30px; text-transform: uppercase; position: relative; display: inline-block; letter-spacing: -1px; }
+        .doodle-highlight { position: absolute; bottom: 5px; right: -20px; width: 60px; height: 60px; background: var(--accent); z-index: -1; transform: rotate(-10deg); opacity: 0.8; }
+        
+        p { font-size: 1.3rem; line-height: 1.6; color: #333; font-weight: 500; }
+
+        /* Navbar */
+        nav { position: fixed; top: 20px; left: 5%; right: 5%; border: 2px solid var(--accent); display: flex; align-items: stretch; z-index: 100; background: var(--bg); color: var(--text); font-family: var(--font-display); text-transform: uppercase; box-shadow: 4px 4px 0 rgba(0,0,0,0.05); }
+        .logo-box { padding: 15px 30px; display: flex; flex-direction: column; justify-content: center; }
+        .logo { font-size: 2rem; letter-spacing: 1px; line-height: 1; }
+        .logo-sub { font-family: var(--font-main); font-size: 0.8rem; font-weight: bold; opacity: 0.7; text-transform: none; }
+        
+        .nav-links { display: flex; flex: 1; }
+        .nav-item { flex: 1; display: flex; justify-content: center; align-items: center; border-left: 2px dashed var(--accent); font-size: 1.2rem; transition: background 0.3s; letter-spacing: 1px;}
+        .nav-item:hover { background: rgba(97, 122, 68, 0.1); }
+        .nav-item span { border-bottom: 2px solid var(--text); padding-bottom: 2px; }
+
+        .btn-collab { background: var(--accent); color: #fff; padding: 0 30px; border: none; border-left: 2px dashed var(--accent); font-family: var(--font-display); font-size: 1.2rem; text-transform: uppercase; transition: all 0.3s ease; pointer-events: auto; }
+        .btn-collab:hover { background: var(--text); color: var(--bg); }
 
         /* Hero */
-        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .hero-title-container { position: relative; display: inline-block; }
-        .hero h2 { font-family: var(--font-head); font-size: clamp(6rem, 15vw, 16rem); line-height: 0.9; text-transform: uppercase; color: var(--text); z-index: 2; position: relative; letter-spacing: -2px; }
-        .hero-avatar { position: absolute; top: -5%; right: -5%; width: clamp(80px, 12vw, 150px); height: clamp(80px, 12vw, 150px); background: var(--bg); border: 3px solid var(--accent); border-radius: 50%; padding: 10px; z-index: 3; animation: float 6s ease-in-out infinite; box-shadow: 10px 10px 0px rgba(101, 131, 69, 0.2); }
-
-        /* About Section */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-        .about-content h2 { font-family: var(--font-head); font-size: clamp(4rem, 8vw, 7rem); line-height: 1; margin-bottom: 30px; text-transform: uppercase; position: relative; }
-        .about-content p { font-size: 1.3rem; line-height: 1.8; margin-bottom: 20px; font-weight: 600; white-space: pre-line; }
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 100px; }
+        .hero-content { position: relative; }
         
-        .tools-title { font-family: var(--font-head); font-size: 2rem; text-transform: uppercase; margin-top: 30px; margin-bottom: 15px; }
-        .tools-grid { display: flex; gap: 15px; }
-        .tool-icon { width: 70px; height: 70px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.5rem; transition: transform 0.3s; box-shadow: 4px 4px 0px rgba(0,0,0,0.1); }
-        .tool-icon:hover { transform: translateY(-5px); }
-
-        /* Animated Avatar Area */
-        .about-avatar-wrapper { position: relative; display: flex; justify-content: center; align-items: center; }
-        .main-avatar { width: 100%; max-width: 450px; animation: float 5s ease-in-out infinite; position: relative; z-index: 5; filter: drop-shadow(0px 20px 20px rgba(0,0,0,0.1)); }
+        /* About Section Redesign */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .about-text p { margin-bottom: 20px; white-space: pre-line; }
+        .tools-title { font-family: var(--font-display); font-size: 2rem; text-transform: uppercase; margin: 30px 0 15px; }
+        .roles { display: flex; gap: 15px; flex-wrap: wrap; }
+        .role-pill { padding: 15px 25px; border-radius: 12px; font-weight: 800; font-size: 1.2rem; color: #fff; text-transform: uppercase; box-shadow: 4px 4px 0 rgba(0,0,0,0.1); }
         
-        .floating-badge { position: absolute; background: var(--accent); color: var(--bg); padding: 8px 16px; border-radius: 30px; font-weight: 800; font-size: 0.9rem; z-index: 6; display: flex; align-items: center; gap: 8px; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); animation: float 4s ease-in-out infinite; }
+        /* Tool Colors (mocking the image) */
+        .role-pill:nth-child(1) { background: #00a8e1; } /* Ps blue */
+        .role-pill:nth-child(2) { background: #0054a6; } /* Ae blue */
+        .role-pill:nth-child(3) { background: #330072; } /* Pr purple */
+        .role-pill:nth-child(4) { background: #9900ff; }
+
+        /* Avatar Container */
+        .avatar-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; display: flex; justify-content: center; }
+        .animated-avatar { width: 100%; height: auto; object-fit: contain; animation: floatAvatar 4s ease-in-out infinite; filter: drop-shadow(10px 10px 0px rgba(0,0,0,0.1)); }
+        
+        @keyframes floatAvatar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        .floating-badge { position: absolute; background: var(--accent); color: #fff; font-weight: bold; padding: 8px 15px; border-radius: 20px; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; z-index: 10; animation: floatDoodle 5s infinite; }
         .floating-badge::after { content: ''; position: absolute; width: 0; height: 0; border-style: solid; }
-        .badge-1 { top: 20%; left: 0; transform: rotate(-5deg); animation-delay: 0.5s; }
-        .badge-1::after { border-width: 8px 0 8px 12px; border-color: transparent transparent transparent var(--accent); right: -10px; top: 50%; transform: translateY(-50%); }
-        .badge-2 { bottom: 30%; right: -5%; transform: rotate(5deg); animation-delay: 1s; }
-        .badge-2::after { border-width: 8px 12px 8px 0; border-color: transparent var(--accent) transparent transparent; left: -10px; top: 50%; transform: translateY(-50%); }
+        .badge-1 { top: 20%; left: -5%; }
+        .badge-1::after { border-width: 10px 0 10px 15px; border-color: transparent transparent transparent var(--accent); right: -10px; top: 50%; transform: translateY(-50%); }
+        .badge-2 { top: 40%; right: -5%; animation-delay: 1s; }
+        .badge-2::after { border-width: 10px 15px 10px 0; border-color: transparent var(--accent) transparent transparent; left: -10px; top: 50%; transform: translateY(-50%); }
 
-        /* Portfolio */
-        .section-title { font-family: var(--font-head); font-size: 4rem; text-align: center; text-transform: uppercase; margin-bottom: 50px; }
-        .filters { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
-        .filter-btn { padding: 10px 25px; background: transparent; border: 2px solid var(--text); border-radius: 50px; font-weight: 800; text-transform: uppercase; transition: var(--transition); }
-        .filter-btn.active, .filter-btn:hover { background: var(--text); color: var(--bg); }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Services & Portfolio */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .service-card { background: transparent; padding: 40px; border: 3px solid var(--text); border-radius: 20px; box-shadow: 8px 8px 0px var(--accent); transition: var(--transition); }
+        .service-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0px var(--text); }
+        .service-card h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .filters { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; }
+        .filter-btn { padding: 10px 25px; background: transparent; border: 2px solid var(--text); border-radius: 50px; font-weight: bold; font-size: 1.1rem; transition: var(--transition); text-transform: uppercase;}
+        .filter-btn.active, .filter-btn:hover { background: var(--text); color: var(--bg); box-shadow: 4px 4px 0 var(--accent); transform: translate(-2px, -2px);}
         
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 40px; }
-        .portfolio-item { border-radius: 20px; overflow: hidden; border: 4px solid var(--text); box-shadow: 8px 8px 0px var(--text); transition: var(--transition); background: var(--card); }
-        .portfolio-item:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0px var(--accent); }
-        .portfolio-item img { width: 100%; height: 250px; object-fit: cover; border-bottom: 4px solid var(--text); }
-        .portfolio-info { padding: 20px; }
-        .portfolio-info h3 { font-family: var(--font-head); font-size: 1.5rem; text-transform: uppercase; }
+        .portfolio-item { position: relative; border-radius: 20px; overflow: hidden; border: 3px solid var(--text); box-shadow: 6px 6px 0 var(--text); transition: transform 0.3s ease; }
+        .portfolio-item img { width: 100%; height: 250px; object-fit: cover; transition: transform 0.6s ease; display: block; }
+        .portfolio-info { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 20px; background: rgba(26,26,26,0.9); color: #fff; transition: bottom 0.4s ease; pointer-events: none; border-top: 3px solid var(--accent);}
+        .portfolio-item:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--accent); }
+        .portfolio-item:hover img { transform: scale(1.05); filter: grayscale(20%); }
+        .portfolio-item:hover .portfolio-info { bottom: 0; }
 
-        /* Modal */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 10001; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; pointer-events: auto; }
+        /* Footer & Social Icons */
+        footer { padding: 80px 0; text-align: center; position: relative; overflow: hidden;}
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .social-icon-box { background: var(--text); padding: 15px; border-radius: 15px; display: flex; justify-content: center; align-items: center; transition: var(--transition); box-shadow: 4px 4px 0 var(--accent); }
+        .social-icon { width: 30px; height: 30px; fill: var(--bg); }
+        .social-icon-box:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--accent); background: var(--accent); }
+
+        /* Modal popup */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(230, 228, 220, 0.8); backdrop-filter: blur(5px); z-index: 10001; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; pointer-events: auto; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content { background: var(--bg); padding: 50px; border-radius: 24px; border: 4px solid var(--text); width: 90%; max-width: 500px; position: relative; transform: translateY(50px); transition: transform 0.4s; box-shadow: 15px 15px 0px var(--accent); }
+        .modal-content { background: var(--bg); padding: 50px; border-radius: 20px; width: 90%; max-width: 500px; position: relative; transform: translateY(50px); transition: transform 0.4s; box-shadow: 15px 15px 0 var(--accent); border: 4px solid var(--text); }
         .modal-overlay.active .modal-content { transform: translateY(0); }
-        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2rem; background: none; border: none; font-weight: bold; color: var(--text); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; background: none; border: none; font-weight: bold; color: var(--text); transition: color 0.2s; font-family: var(--font-display);}
+        .close-btn:hover { color: var(--accent); }
         
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 8px; text-transform: uppercase; }
-        .form-group input, .form-group textarea { width: 100%; padding: 15px; border: 2px solid var(--text); border-radius: 12px; background: var(--card); font-family: var(--font-body); font-size: 1rem; outline: none; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; font-size: 0.9rem;}
+        .form-group input, .form-group textarea { width: 100%; padding: 15px; border: 3px solid var(--text); border-radius: 12px; background: var(--card); color: var(--text); font-family: inherit; font-size: 1rem; outline: none; transition: box-shadow 0.2s;}
+        .form-group input:focus, .form-group textarea:focus { box-shadow: 4px 4px 0 var(--accent); }
         .form-group textarea { min-height: 120px; resize: vertical; }
-        .submit-btn { width: 100%; padding: 15px; background: var(--text); color: var(--bg); border: none; border-radius: 12px; font-family: var(--font-head); font-size: 1.5rem; text-transform: uppercase; transition: background 0.3s; }
-        .submit-btn:hover { background: var(--accent); }
+        .submit-btn { width: 100%; padding: 15px; background: var(--accent); color: #fff; border: 3px solid var(--text); border-radius: 12px; font-size: 1.2rem; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; cursor: none; box-shadow: 4px 4px 0 var(--text);}
+        .submit-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--text); }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-        @media(max-width: 900px) {
-            .nav-brand { padding: 0 15px; border: none; }
-            .nav-links { display: none; }
+        @media(max-width: 900px) { 
+            h1 { font-size: 4rem; } 
+            .nav-links { display: none; } 
             .about-grid { grid-template-columns: 1fr; }
-            .hero h2 { font-size: 4rem; }
-            #cursor-dot, #cursor-ring { display: none; }
-            * { cursor: auto !important; }
+            .btn-collab { padding: 0 20px; }
+            #cursor-dot, #cursor-ring { display: none; } 
+            * { cursor: auto !important; } 
         }
     </style>
 </head>
@@ -142,91 +155,146 @@
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
 
+    <div id="loader"><div class="loader-text">SR STUDIOS</div></div>
+
+    <!-- Background Doodles SVG Layer -->
+    <div class="doodle-layer">
+        <!-- Dashed Paths crossing screen -->
+        <svg class="d-path" style="position:absolute; top: 20%; left: -10%; width: 120%; height: 300px;" viewBox="0 0 1200 300">
+            <path d="M0,150 Q300,50 600,150 T1200,150" />
+            <circle cx="200" cy="115" r="8" class="d-dot"/>
+            <circle cx="900" cy="115" r="8" class="d-dot"/>
+        </svg>
+        <svg class="d-path" style="position:absolute; top: 60%; left: -10%; width: 120%; height: 400px;" viewBox="0 0 1200 400">
+            <path d="M1200,50 Q800,250 400,200 T0,350" />
+            <circle cx="800" cy="180" r="12" class="d-dot"/>
+        </svg>
+
+        <!-- Floating Elements -->
+        <svg class="d-star float-anim" style="position:absolute; top: 15%; left: 8%; width: 40px;" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        <svg class="d-star float-anim-alt" style="position:absolute; top: 35%; right: 12%; width: 50px; opacity: 0.6;" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        <svg class="d-star float-anim" style="position:absolute; bottom: 15%; left: 15%; width: 30px;" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        
+        <svg class="d-heart float-anim-alt" style="position:absolute; top: 75%; right: 20%; width: 35px;" viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.28 2,8.5C2,5.42 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.09C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.42 22,8.5C22,12.28 18.6,15.36 13.45,20.04L12,21.35Z"/></svg>
+        <svg class="d-heart float-anim" style="position:absolute; top: 80%; right: 25%; width: 25px;" viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.28 2,8.5C2,5.42 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.09C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.42 22,8.5C22,12.28 18.6,15.36 13.45,20.04L12,21.35Z"/></svg>
+
+        <!-- Scribbles -->
+        <svg class="d-solid-path float-anim" style="position:absolute; top: 25%; left: 25%; width: 80px; height: 80px;" viewBox="0 0 100 100"><path d="M10,10 L30,40 L50,10 L70,50 L90,20"/></svg>
+        <svg class="d-solid-path float-anim-alt" style="position:absolute; top: 12%; right: 30%; width: 60px; height: 60px;" viewBox="0 0 100 100"><path d="M20,80 C 20,20, 80,80, 80,20"/></svg>
+    </div>
+
+    <!-- Navigation -->
     <nav>
-        <div class="nav-brand hover-target">
-            <h1 id="nav-name">SR STUDIOS</h1>
-            <span id="nav-subtitle">Thumbnail Designer</span>
+        <div class="logo-box hover-target">
+            <span class="logo">SR.</span>
+            <span class="logo-sub" id="nav-name">Sarthak Raj</span>
         </div>
         <div class="nav-links">
-            <a href="#hero" class="nav-link hover-target">Home</a>
-            <a href="#about" class="nav-link hover-target">About</a>
-            <a href="#portfolio" class="nav-link hover-target">Works</a>
+            <a href="#hero" class="nav-item hover-target"><span>Home</span></a>
+            <a href="#about" class="nav-item hover-target"><span>About</span></a>
+            <a href="#portfolio" class="nav-item hover-target"><span>Works</span></a>
+            <a href="#services" class="nav-item hover-target"><span>Process</span></a>
         </div>
-        <button class="btn-collab hover-target" onclick="openModal()">Collab / Hire</button>
+        <button class="btn-collab hover-target" onclick="openModal()">Collab</button>
     </nav>
 
-    <!-- Global Doodles -->
-    <svg class="doodle hero-dashed-path" viewBox="0 0 1000 500" preserveAspectRatio="none">
-        <path class="d-dashed" d="M0,250 C200,400 300,100 500,250 C700,400 800,100 1000,250"/>
-    </svg>
-    <svg class="doodle hero-star-1" viewBox="0 0 50 50"><path class="d-solid" d="M25,0 L32,18 L50,25 L32,32 L25,50 L18,32 L0,25 L18,18 Z"/></svg>
-    <svg class="doodle hero-star-2" viewBox="0 0 50 50"><path class="d-solid" d="M25,0 L32,18 L50,25 L32,32 L25,50 L18,32 L0,25 L18,18 Z"/></svg>
-    <svg class="doodle hero-heart" viewBox="0 0 50 50"><path class="d-solid" d="M25,45 C25,45 5,30 5,15 C5,5 20,5 25,15 C30,5 45,5 45,15 C45,30 25,45 25,45 Z"/></svg>
-
+    <!-- Hero -->
     <section class="hero hover-target" id="hero">
-        <div class="container" style="text-align: center;">
-            <div class="hero-title-container">
-                <h2 id="hero-title">PORTFOLIO</h2>
-                <img src="" id="hero-avatar" class="hero-avatar" alt="Mini Avatar">
-            </div>
+        <div class="container hero-content">
+            <h1 class="reveal" id="hero-title">Loading...</h1>
+            <p class="reveal" id="hero-desc" style="max-width: 600px; margin: 0 auto; font-size: 1.5rem;"></p>
         </div>
     </section>
 
-    <section id="about" class="container hover-target">
-        <svg class="doodle about-scribble" viewBox="0 0 100 100"><path class="d-solid" d="M10,50 Q30,10 50,50 T90,50 Q70,90 50,50 T10,50"/></svg>
-        
+    <!-- About Me Redesign -->
+    <section id="about" class="container reveal hover-target">
         <div class="about-grid">
-            <div class="about-content">
-                <h2 id="about-title">ABOUT ME</h2>
+            <div class="about-text">
+                <h2>ABOUT ME<div class="doodle-highlight"></div></h2>
                 <p id="about-bio"></p>
-                <div class="tools-title" id="about-tools-title">TOOLS I USE-</div>
-                <div class="tools-grid" id="about-tools"></div>
+                <div class="tools-title">TOOLS I USE-</div>
+                <div class="roles" id="about-tools"></div>
             </div>
-            
-            <div class="about-avatar-wrapper">
-                <img src="" id="main-avatar" class="main-avatar" alt="Character Avatar">
-                <div class="floating-badge badge-1" id="badge-1">GRAPHIC DESIGNER</div>
-                <div class="floating-badge badge-2" id="badge-2">YOUTUBE</div>
+            <div class="avatar-container">
+                <div class="floating-badge badge-1">GRAPHIC DESIGNER</div>
+                <div class="floating-badge badge-2">YOUTUBE</div>
+                <img id="about-avatar" class="animated-avatar" src="" alt="Sarthak Avatar">
             </div>
         </div>
     </section>
 
-    <section id="portfolio" class="container">
-        <h2 class="section-title">SELECTED WORKS</h2>
+    <!-- Services -->
+    <section id="services" class="container reveal">
+        <h2>Expertise<div class="doodle-highlight" style="background:var(--text); right:-10px;"></div></h2>
+        <div class="services-grid" id="services-grid"></div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portfolio" class="container reveal">
+        <h2>Selected Works<div class="doodle-highlight"></div></h2>
         <div class="filters" id="portfolio-filters">
             <button class="filter-btn active hover-target" data-filter="all">All</button>
             <button class="filter-btn hover-target" data-filter="Gaming">Gaming</button>
+            <button class="filter-btn hover-target" data-filter="BGMI">BGMI</button>
+            <button class="filter-btn hover-target" data-filter="Tech">Tech</button>
             <button class="filter-btn hover-target" data-filter="Documentary">Documentary</button>
+            <button class="filter-btn hover-target" data-filter="AI">AI</button>
         </div>
         <div class="portfolio-grid" id="portfolio-grid"></div>
     </section>
+
+    <!-- Footer -->
+    <footer class="hover-target">
+        <!-- More Background Doodles for Footer -->
+        <svg class="d-path" style="position:absolute; bottom: 10%; left: -10%; width: 120%; height: 200px; z-index:0;" viewBox="0 0 1200 200">
+            <path d="M0,100 Q400,200 800,50 T1200,100" />
+            <circle cx="800" cy="50" r="10" class="d-dot"/>
+        </svg>
+
+        <div class="container reveal">
+            <h2 style="font-size: 4rem;">Let's Collaborate<div class="doodle-highlight"></div></h2>
+            <p style="font-weight: bold; font-size: 1.5rem;">Ready to elevate your visual identity?</p>
+            <div class="social-links" id="social-links">
+                <!-- SVG Logos injected via JS -->
+            </div>
+            <p style="margin-top: 50px; font-size: 1rem; font-weight:bold; opacity: 0.8;">© 2026 SR Studios. Built dynamically.</p>
+        </div>
+    </footer>
 
     <!-- Collab Modal Form -->
     <div class="modal-overlay" id="collab-modal">
         <div class="modal-content">
             <button class="close-btn hover-target" onclick="closeModal()">&times;</button>
-            <h2 style="font-family: var(--font-head); font-size: 3rem; margin-bottom: 5px; text-transform: uppercase; line-height: 1;">Let's Work</h2>
-            <p style="margin-bottom: 25px; font-weight: 600; opacity: 0.7;">Fill out the details below.</p>
+            <h2 style="font-size: 2.5rem; margin-bottom: 5px; color:var(--text);">Start a Project<div class="doodle-highlight" style="width:40px; height:40px; right:-5px; bottom:10px;"></div></h2>
+            <p style="margin-bottom: 25px; font-size: 1.1rem; font-weight:bold;">Tell me about your requirements.</p>
             
             <div class="form-group">
                 <label>Your Name</label>
                 <input type="text" id="client-name" class="hover-target" placeholder="John Doe">
             </div>
             <div class="form-group">
-                <label>Discord / Email</label>
+                <label>Your Email / Discord ID</label>
                 <input type="text" id="client-contact" class="hover-target" placeholder="email@example.com">
             </div>
             <div class="form-group">
                 <label>Project Details</label>
-                <textarea id="client-details" class="hover-target" placeholder="I need 5 thumbnails for..."></textarea>
+                <textarea id="client-details" class="hover-target" placeholder="I need a thumbnail for..."></textarea>
             </div>
-            <button class="submit-btn hover-target" onclick="submitProject()">Submit Request</button>
+            <button class="submit-btn hover-target" onclick="submitProject()">Send Inquiry</button>
         </div>
     </div>
 
     <script>
         const DATA_KEY = 'sr_studios_data';
         let siteData = {};
+
+        // SVGs for social media blocks
+        const icons = {
+            instagram: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.88z"/></svg>`,
+            discord: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>`,
+            youtube: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+            email: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`
+        };
 
         async function loadData() {
             const localData = localStorage.getItem(DATA_KEY);
@@ -243,38 +311,41 @@
                         renderWebsite();
                     } else throw new Error("Fetch failed");
                 } catch (e) {
-                    console.log("Using fallback data");
+                    // Fallback to ensure it functions
+                    siteData = { theme: {backgroundColor: "#e6e4dc", accentColor: "#617a44", textColor: "#1a1a1a"}, hero: { title: "PORTFOLIO", name: "Sarthak Raj", roles: ["Graphic Designer"], description: "Premium aesthetics." }, about: { bio: "Creative designer.", tools: ["Ps"], avatar: "https://placehold.co/400x500/617a44/fff?text=Avatar" }, services: [], portfolio: [], social: { discord: "sarthakraj", email: "hello@srstudios.com" }, tasks: [] };
+                    renderWebsite();
                 }
             }
         }
 
         function renderWebsite() {
-            // Theme
             if(siteData.theme) {
                 document.documentElement.style.setProperty('--bg', siteData.theme.backgroundColor);
                 document.documentElement.style.setProperty('--accent', siteData.theme.accentColor);
                 document.documentElement.style.setProperty('--text', siteData.theme.textColor);
             }
             
-            // Nav & Hero
-            document.getElementById('nav-name').textContent = siteData.hero.name;
-            document.getElementById('nav-subtitle').textContent = siteData.hero.subtitle;
+            document.getElementById('nav-name').textContent = siteData.hero.name || 'Graphic Designer';
             document.getElementById('hero-title').textContent = siteData.hero.title;
-            document.getElementById('hero-avatar').src = siteData.hero.avatar;
-
-            // About
-            document.getElementById('about-title').textContent = siteData.about.title;
+            document.getElementById('hero-desc').textContent = siteData.hero.description;
+            
             document.getElementById('about-bio').textContent = siteData.about.bio;
-            document.getElementById('about-tools-title').textContent = siteData.about.toolsTitle;
-            document.getElementById('main-avatar').src = siteData.about.avatar;
-            document.getElementById('badge-1').textContent = siteData.about.labels[0];
-            document.getElementById('badge-2').textContent = siteData.about.labels[1];
-
-            document.getElementById('about-tools').innerHTML = siteData.about.tools.map(t => 
-                `<div class="tool-icon hover-target" style="background-color: ${t.color}">${t.name}</div>`
-            ).join('');
+            document.getElementById('about-avatar').src = siteData.about.avatar || "https://placehold.co/400x500/617a44/fff?text=Avatar";
+            
+            document.getElementById('about-tools').innerHTML = siteData.about.tools.map(t => `<div class="role-pill hover-target">${t}</div>`).join('');
+            document.getElementById('services-grid').innerHTML = siteData.services.map(s => `<div class="service-card hover-target"><h3>${s.title}</h3><p>${s.desc}</p></div>`).join('');
             
             renderPortfolio('all');
+
+            const socContainer = document.getElementById('social-links');
+            socContainer.innerHTML = `
+                ${siteData.social.instagram ? `<a href="${siteData.social.instagram}" target="_blank" class="hover-target"><div class="social-icon-box">${icons.instagram}</div></a>` : ''}
+                ${siteData.social.youtube ? `<a href="${siteData.social.youtube}" target="_blank" class="hover-target"><div class="social-icon-box">${icons.youtube}</div></a>` : ''}
+                <a href="mailto:${siteData.social.email}" class="hover-target"><div class="social-icon-box">${icons.email}</div></a>
+                <a href="#" class="hover-target" onclick="alert('Discord ID: ${siteData.social.discord}')"><div class="social-icon-box">${icons.discord}</div></a>
+            `;
+
+            setTimeout(initAnimations, 100);
         }
 
         function renderPortfolio(filter) {
@@ -284,8 +355,8 @@
                 <div class="portfolio-item hover-target">
                     <img src="${item.image}" alt="${item.title}">
                     <div class="portfolio-info">
-                        <h3>${item.title}</h3>
-                        <p style="color:var(--accent); font-weight:800; margin-top:5px;">${item.category}</p>
+                        <h3 style="font-family:var(--font-display); font-size:1.8rem; letter-spacing:1px; text-transform:uppercase;">${item.title}</h3>
+                        <p style="color:var(--accent); font-weight:800; text-transform:uppercase;">${item.category}</p>
                     </div>
                 </div>
             `).join('');
@@ -300,7 +371,7 @@
             const contact = document.getElementById('client-contact').value.trim();
             const details = document.getElementById('client-details').value.trim();
 
-            if(!name || !contact || !details) return alert("Please fill all fields.");
+            if(!name || !contact || !details) return alert("Please fill all details so I can understand your project!");
 
             const newTask = {
                 id: Date.now(),
@@ -317,12 +388,18 @@
             
             localStorage.setItem(DATA_KEY, JSON.stringify(currentData));
             
-            alert("Sent successfully! It's now on the Admin Dashboard.");
+            alert("Project details submitted successfully! Sarthak will reach out to you soon.");
             closeModal();
             
             document.getElementById('client-name').value = '';
             document.getElementById('client-contact').value = '';
             document.getElementById('client-details').value = '';
+        }
+
+        function initAnimations() {
+            setTimeout(() => document.getElementById('loader').style.transform = 'translateY(-100%)', 800);
+            const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }), { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
         // Custom Cursor

@@ -5,36 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SR STUDIOS | Admin Dashboard</title>
     <style>
-        :root { --bg: #f4f4f5; --text: #18181b; --primary: #1c1c1c; --sidebar: #ffffff; --border: #e4e4e7; --accent: #658345; }
+        :root { --bg: #f4f4f5; --text: #18181b; --primary: #000; --sidebar: #ffffff; --border: #e4e4e7; --accent: #617a44; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
         
+        /* Login */
         #login-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .login-box { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+        .login-box h2 { margin-bottom: 20px; }
         input[type="password"], input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px; }
-        button { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; }
-        
+        button { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: opacity 0.2s; }
+        button:hover { opacity: 0.8; }
+
+        /* Layout */
         .sidebar { width: 250px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; }
-        .brand { padding: 0 20px 20px; font-weight: 900; font-size: 1.2rem; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-        .nav-item { padding: 12px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .nav-item:hover, .nav-item.active { background: var(--bg); font-weight: 600; border-right: 3px solid var(--accent); }
-        .badge { background: #ef4444; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 50px; font-weight: bold;}
+        .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.2rem; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .nav-item { padding: 12px 20px; cursor: pointer; transition: background 0.2s; display: flex; justify-content: space-between; align-items: center; }
+        .nav-item:hover, .nav-item.active { background: var(--bg); font-weight: 600; border-right: 3px solid var(--primary); }
+        .badge { background: #ef4444; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 50px; }
         
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .panel { display: none; background: #fff; padding: 30px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .panel { display: none; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .panel.active { display: block; }
         .panel h2 { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
         
+        /* Form & List */
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
         textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; min-height: 100px; resize: vertical; }
         
-        .task-card { border: 2px solid var(--border); border-radius: 8px; margin-bottom: 15px; background: #fafafa; }
-        .task-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #fff; border-radius: 8px; }
-        .task-header:hover { border-color: var(--accent); }
-        .task-body { padding: 20px; border-top: 1px solid var(--border); display: none; }
+        /* Task Cards */
+        .task-card { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; background: #fafafa; overflow: hidden; }
+        .task-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #fff; }
+        .task-header:hover { background: #f4f4f5; }
+        .task-body { padding: 20px; border-top: 1px solid var(--border); display: none; background: #fafafa; }
         .task-body.open { display: block; }
-        .task-body p { margin-bottom: 10px; line-height: 1.5; }
+        .task-body p { margin-bottom: 10px; font-size: 0.95rem; line-height: 1.5; }
         .btn-done { width: auto; background: var(--accent); margin-top: 10px; }
         
         .save-btn { width: auto; display: inline-block; margin-top: 20px; background: var(--accent); }
@@ -46,7 +52,7 @@
 
     <div id="login-screen">
         <div class="login-box">
-            <h2 style="margin-bottom: 10px;">SR Admin</h2>
+            <h2>SR Admin</h2>
             <p style="margin-bottom: 20px; font-size: 0.9rem; color: #666;">Default password is: <strong>admin</strong></p>
             <input type="password" id="admin-pass" placeholder="Enter Password">
             <button onclick="login()">Login</button>
@@ -59,10 +65,12 @@
         <div class="brand">SR STUDIOS<br><span style="font-size:0.8rem;font-weight:normal;color:#666;">Control Panel</span></div>
         <div class="nav-item active" onclick="switchTab('dashboard')">Dashboard</div>
         <div class="nav-item" onclick="switchTab('tasks')">
-            Inquiries <span id="task-badge" class="badge" style="display:none;">0</span>
+            Tasks / Inquiries <span id="task-badge" class="badge" style="display:none;">0</span>
         </div>
-        <div class="nav-item" onclick="switchTab('content')">Content & Avatar</div>
+        <div class="nav-item" onclick="switchTab('content')">Content Manager</div>
         <div class="nav-item" onclick="switchTab('portfolio')">Portfolio Manager</div>
+        <div class="nav-item" onclick="switchTab('social')">Social Manager</div>
+        <div class="nav-item" onclick="switchTab('theme')">Theme & Settings</div>
     </div>
 
     <div class="main-content">
@@ -82,32 +90,40 @@
         </div>
 
         <div id="tasks" class="panel">
-            <h2>Client Inquiries</h2>
-            <p style="margin-bottom: 20px; color: #666;">Forms submitted from the website "Hire Me" button appear here.</p>
+            <h2>Client Inquiries & Pending Tasks</h2>
+            <p style="margin-bottom: 20px; color: #666;">Review project details submitted via the website form.</p>
             <div id="tasks-list"></div>
         </div>
 
         <div id="content" class="panel">
-            <h2>Website Content & Avatars</h2>
-            
-            <div class="form-group"><label>Navbar Subtitle</label><input type="text" id="hero-sub"></div>
-            
-            <h3 style="margin: 30px 0 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px;">About Section</h3>
+            <h2>Website Content</h2>
+            <div class="form-group"><label>Hero Title (e.g. PORTFOLIO)</label><input type="text" id="hero-title"></div>
+            <div class="form-group"><label>Hero Description</label><textarea id="hero-desc"></textarea></div>
             <div class="form-group"><label>About Bio</label><textarea id="about-bio"></textarea></div>
-            <div class="form-group"><label>Main Avatar Image URL (GIF/PNG/SVG)</label><input type="text" id="about-avatar"></div>
-            
-            <div style="display:flex; gap: 20px;">
-                <div class="form-group" style="flex:1;"><label>Floating Label 1</label><input type="text" id="label-1"></div>
-                <div class="form-group" style="flex:1;"><label>Floating Label 2</label><input type="text" id="label-2"></div>
-            </div>
-
+            <div class="form-group"><label>About Avatar Image URL</label><input type="text" id="about-avatar"></div>
             <button class="save-btn" onclick="updateWebsiteContent()">Save Content</button>
         </div>
 
         <div id="portfolio" class="panel">
             <h2>Portfolio Management</h2>
-            <textarea id="portfolio-json" style="font-family: monospace; min-height: 400px;"></textarea>
-            <button class="save-btn" onclick="updatePortfolio()">Save Portfolio JSON</button>
+            <textarea id="portfolio-json" style="font-family: monospace; min-height: 300px;"></textarea>
+            <button class="save-btn" onclick="updatePortfolio()">Save Portfolio</button>
+        </div>
+
+        <div id="social" class="panel">
+            <h2>Social Links</h2>
+            <div class="form-group"><label>Discord Username</label><input type="text" id="social-discord"></div>
+            <div class="form-group"><label>Instagram URL</label><input type="text" id="social-instagram"></div>
+            <div class="form-group"><label>YouTube URL</label><input type="text" id="social-youtube"></div>
+            <div class="form-group"><label>Email</label><input type="text" id="social-email"></div>
+            <button class="save-btn" onclick="updateSocial()">Save Socials</button>
+        </div>
+        
+        <div id="theme" class="panel">
+            <h2>Theme Colors</h2>
+            <div class="form-group"><label>Background Color (Hex)</label><input type="text" id="theme-bg"></div>
+            <div class="form-group"><label>Accent Color (Hex)</label><input type="text" id="theme-accent"></div>
+            <button class="save-btn" onclick="updateTheme()">Save Theme</button>
         </div>
 
     </div>
@@ -131,7 +147,7 @@
                 populateForms();
                 renderTasks();
             } else {
-                alert("No data found! Open your main portfolio website first.");
+                alert("No data found! Open your main portfolio website first so it creates the database.");
             }
         }
 
@@ -145,13 +161,20 @@
             if(!adminData.hero) return;
             document.getElementById('stat-proj').innerText = adminData.portfolio.length;
             
-            document.getElementById('hero-sub').value = adminData.hero.subtitle || '';
+            document.getElementById('hero-title').value = adminData.hero.title;
+            document.getElementById('hero-desc').value = adminData.hero.description;
             document.getElementById('about-bio').value = adminData.about.bio;
-            document.getElementById('about-avatar').value = adminData.about.avatar;
-            document.getElementById('label-1').value = adminData.about.labels[0];
-            document.getElementById('label-2').value = adminData.about.labels[1];
+            document.getElementById('about-avatar').value = adminData.about.avatar || '';
             
             document.getElementById('portfolio-json').value = JSON.stringify(adminData.portfolio, null, 2);
+            
+            document.getElementById('social-discord').value = adminData.social.discord || '';
+            document.getElementById('social-instagram').value = adminData.social.instagram || '';
+            document.getElementById('social-youtube').value = adminData.social.youtube || '';
+            document.getElementById('social-email').value = adminData.social.email || '';
+            
+            document.getElementById('theme-bg').value = adminData.theme.backgroundColor || '';
+            document.getElementById('theme-accent').value = adminData.theme.accentColor || '';
         }
 
         function renderTasks() {
@@ -166,20 +189,20 @@
                 badge.innerText = tasks.length;
             } else {
                 badge.style.display = 'none';
-                list.innerHTML = '<p style="color: #666; font-style: italic;">No pending inquiries. You are all caught up!</p>';
+                list.innerHTML = '<p>No pending inquiries.</p>';
             }
 
             [...tasks].reverse().forEach(task => {
                 list.innerHTML += `
                     <div class="task-card">
                         <div class="task-header" onclick="toggleTask(${task.id})">
-                            <div><strong>${task.name}</strong> <span style="color:#888; font-size: 0.9em; margin-left: 10px;">${task.date}</span></div>
-                            <div style="font-weight:bold; color:var(--accent)">Expand ▼</div>
+                            <div><strong>${task.name}</strong> - <span style="color:#666">${task.date}</span></div>
+                            <div style="font-weight:bold; color:var(--accent)">View Details ▼</div>
                         </div>
                         <div class="task-body" id="task-body-${task.id}">
-                            <p><strong>Contact / Discord ID:</strong> <br> ${task.contact}</p>
-                            <p style="margin-top: 15px;"><strong>Project Details:</strong><br> ${task.details.replace(/\n/g, '<br>')}</p>
-                            <button class="btn-done" onclick="markTaskComplete(${task.id})">Mark as Completed & Delete</button>
+                            <p><strong>Contact/Discord:</strong> ${task.contact}</p>
+                            <p><strong>Requirements:</strong><br> ${task.details.replace(/\n/g, '<br>')}</p>
+                            <button class="btn-done" onclick="markTaskComplete(${task.id})">Mark as Completed / Delete</button>
                         </div>
                     </div>
                 `;
@@ -191,20 +214,17 @@
         }
 
         function markTaskComplete(id) {
-            if(confirm("Are you sure you want to remove this inquiry? Make sure you have replied to the client!")) {
+            if(confirm("Delete this inquiry?")) {
                 adminData.tasks = adminData.tasks.filter(t => t.id !== id);
                 saveData();
             }
         }
 
         function updateWebsiteContent() {
-            adminData.hero.subtitle = document.getElementById('hero-sub').value;
+            adminData.hero.title = document.getElementById('hero-title').value;
+            adminData.hero.description = document.getElementById('hero-desc').value;
             adminData.about.bio = document.getElementById('about-bio').value;
             adminData.about.avatar = document.getElementById('about-avatar').value;
-            adminData.about.labels = [
-                document.getElementById('label-1').value,
-                document.getElementById('label-2').value
-            ];
             saveData();
         }
 
@@ -214,6 +234,20 @@
                 document.getElementById('stat-proj').innerText = adminData.portfolio.length;
                 saveData();
             } catch (e) { alert("Invalid JSON format!"); }
+        }
+
+        function updateSocial() {
+            adminData.social.discord = document.getElementById('social-discord').value;
+            adminData.social.instagram = document.getElementById('social-instagram').value;
+            adminData.social.youtube = document.getElementById('social-youtube').value;
+            adminData.social.email = document.getElementById('social-email').value;
+            saveData();
+        }
+        
+        function updateTheme() {
+            adminData.theme.backgroundColor = document.getElementById('theme-bg').value;
+            adminData.theme.accentColor = document.getElementById('theme-accent').value;
+            saveData();
         }
 
         function switchTab(tabId) {
