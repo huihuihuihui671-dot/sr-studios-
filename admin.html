@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SR STUDIOS | Admin Dashboard</title>
+    <style>
+        :root { --bg: #f4f4f5; --text: #18181b; --primary: #000; --sidebar: #ffffff; --border: #e4e4e7; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Login Screen */
+        #login-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .login-box { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+        .login-box h2 { margin-bottom: 20px; }
+        input[type="password"], input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px; }
+        button { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: opacity 0.2s; }
+        button:hover { opacity: 0.8; }
+
+        /* Layout */
+        .sidebar { width: 250px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; }
+        .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.2rem; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .nav-item { padding: 12px 20px; cursor: pointer; transition: background 0.2s; }
+        .nav-item:hover, .nav-item.active { background: var(--bg); font-weight: 600; border-right: 3px solid var(--primary); }
+        
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .panel { display: none; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .panel.active { display: block; }
+        .panel h2 { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        
+        /* Form Elements */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
+        textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; min-height: 100px; resize: vertical; }
+        .list-manager { border: 1px solid var(--border); border-radius: 6px; padding: 15px; margin-bottom: 15px; background: var(--bg); }
+        
+        .save-btn { width: auto; display: inline-block; margin-top: 20px; background: #22c55e; }
+        .notification { position: fixed; top: 20px; right: 20px; background: #22c55e; color: #fff; padding: 15px 25px; border-radius: 6px; transform: translateX(150%); transition: transform 0.3s; z-index: 9999; }
+        .notification.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>SR Admin</h2>
+            <p style="margin-bottom: 20px; font-size: 0.9rem; color: #666;">Default password is: <strong>admin</strong></p>
+            <input type="password" id="admin-pass" placeholder="Enter Password">
+            <button onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">Changes Saved Successfully!</div>
+
+    <div class="sidebar">
+        <div class="brand">SR STUDIOS<br><span style="font-size:0.8rem;font-weight:normal;color:#666;">Control Panel</span></div>
+        <div class="nav-item active" onclick="switchTab('dashboard')">Dashboard</div>
+        <div class="nav-item" onclick="switchTab('content')">Content Manager</div>
+        <div class="nav-item" onclick="switchTab('portfolio')">Portfolio Manager</div>
+        <div class="nav-item" onclick="switchTab('social')">Social Manager</div>
+        <div class="nav-item" onclick="switchTab('theme')">Theme & Settings</div>
+    </div>
+
+    <div class="main-content">
+        
+        <div id="dashboard" class="panel active">
+            <h2>Overview Statistics</h2>
+            <p>Welcome back, Sarthak. Your architecture is ready for future backend integration.</p>
+            <div style="display:flex; gap:20px; margin-top:20px;">
+                <div class="list-manager" style="flex:1;">
+                    <h3>Total Projects</h3>
+                    <p id="stat-proj" style="font-size: 2rem; font-weight:bold;">0</p>
+                </div>
+                <div class="list-manager" style="flex:1;">
+                    <h3>Data Source</h3>
+                    <p style="font-size: 1.2rem; font-weight:bold; color: #22c55e;">localStorage Sync</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="content" class="panel">
+            <h2>Website Content</h2>
+            <div class="form-group">
+                <label>Hero Title</label>
+                <input type="text" id="hero-title">
+            </div>
+            <div class="form-group">
+                <label>Hero Description</label>
+                <textarea id="hero-desc"></textarea>
+            </div>
+            <div class="form-group">
+                <label>About Bio</label>
+                <textarea id="about-bio"></textarea>
+            </div>
+            <button class="save-btn" onclick="updateWebsiteContent()">Save Content</button>
+        </div>
+
+        <div id="portfolio" class="panel">
+            <h2>Portfolio Management</h2>
+            <p style="margin-bottom: 15px; font-size: 0.9rem;">(Raw JSON Editor for Structure preservation)</p>
+            <textarea id="portfolio-json" style="font-family: monospace; min-height: 300px;"></textarea>
+            <button class="save-btn" onclick="updatePortfolio()">Save Portfolio</button>
+        </div>
+
+        <div id="social" class="panel">
+            <h2>Social Links</h2>
+            <div class="form-group">
+                <label>Discord Username</label>
+                <input type="text" id="social-discord">
+            </div>
+            <div class="form-group">
+                <label>Instagram URL</label>
+                <input type="text" id="social-instagram">
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="text" id="social-email">
+            </div>
+            <button class="save-btn" onclick="updateSocial()">Save Socials</button>
+        </div>
+
+        <div id="theme" class="panel">
+            <h2>Theme Colors</h2>
+            <div class="form-group">
+                <label>Background Color (Hex)</label>
+                <input type="text" id="theme-bg">
+            </div>
+            <div class="form-group">
+                <label>Accent Color (Hex)</label>
+                <input type="text" id="theme-accent">
+            </div>
+            <button class="save-btn" onclick="updateTheme()">Save Theme</button>
+        </div>
+
+    </div>
+
+    <script>
+        const DATA_KEY = 'sr_studios_data';
+        let adminData = {};
+
+        // Security (Basic Client Side)
+        function login() {
+            const pass = document.getElementById('admin-pass').value;
+            if(pass === 'admin') {
+                document.getElementById('login-screen').style.display = 'none';
+                loadData();
+            } else {
+                alert('Incorrect password');
+            }
+        }
+
+        // Future-Ready API Structure
+        function loadData() {
+            const localData = localStorage.getItem(DATA_KEY);
+            if (localData) {
+                adminData = JSON.parse(localData);
+                populateForms();
+            } else {
+                // If localstorage empty, try to init with empty structure to prevent errors
+                alert("No data found in localStorage. Please view the main index.html file first to initialize the database.");
+            }
+        }
+
+        function saveData() {
+            // In the future, replace this with: await fetch('/api/save', { method: 'POST', body: JSON.stringify(adminData) });
+            localStorage.setItem(DATA_KEY, JSON.stringify(adminData));
+            showNotification();
+        }
+
+        // Form Population
+        function populateForms() {
+            if(!adminData.hero) return;
+            
+            // Stats
+            document.getElementById('stat-proj').innerText = adminData.portfolio.length;
+
+            // Content
+            document.getElementById('hero-title').value = adminData.hero.title;
+            document.getElementById('hero-desc').value = adminData.hero.description;
+            document.getElementById('about-bio').value = adminData.about.bio;
+
+            // Portfolio (Stringified for editing flexibility)
+            document.getElementById('portfolio-json').value = JSON.stringify(adminData.portfolio, null, 2);
+
+            // Social
+            document.getElementById('social-discord').value = adminData.social.discord || '';
+            document.getElementById('social-instagram').value = adminData.social.instagram || '';
+            document.getElementById('social-email').value = adminData.social.email || '';
+
+            // Theme
+            document.getElementById('theme-bg').value = adminData.theme.backgroundColor || '';
+            document.getElementById('theme-accent').value = adminData.theme.accentColor || '';
+        }
+
+        // Update Handlers
+        function updateWebsiteContent() {
+            adminData.hero.title = document.getElementById('hero-title').value;
+            adminData.hero.description = document.getElementById('hero-desc').value;
+            adminData.about.bio = document.getElementById('about-bio').value;
+            saveData();
+        }
+
+        function updatePortfolio() {
+            try {
+                const newPort = JSON.parse(document.getElementById('portfolio-json').value);
+                adminData.portfolio = newPort;
+                document.getElementById('stat-proj').innerText = adminData.portfolio.length;
+                saveData();
+            } catch (e) {
+                alert("Invalid JSON format in Portfolio Data!");
+            }
+        }
+
+        function updateSocial() {
+            adminData.social.discord = document.getElementById('social-discord').value;
+            adminData.social.instagram = document.getElementById('social-instagram').value;
+            adminData.social.email = document.getElementById('social-email').value;
+            saveData();
+        }
+
+        function updateTheme() {
+            adminData.theme.backgroundColor = document.getElementById('theme-bg').value;
+            adminData.theme.accentColor = document.getElementById('theme-accent').value;
+            saveData();
+        }
+
+        // UI Helpers
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function showNotification() {
+            const notif = document.getElementById('notification');
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
