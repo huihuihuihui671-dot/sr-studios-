@@ -68,7 +68,7 @@
             Tasks / Inquiries <span id="task-badge" class="badge" style="display:none;">0</span>
         </div>
         <div class="nav-item" onclick="switchTab('content')">Content Manager</div>
-        <div class="nav-item" onclick="switchTab('portfolio')">Portfolio Manager</div>
+        <div class="nav-item" onclick="switchTab('sections')">Section JSONs</div>
         <div class="nav-item" onclick="switchTab('social')">Social Manager</div>
         <div class="nav-item" onclick="switchTab('theme')">Theme & Settings</div>
     </div>
@@ -97,17 +97,34 @@
 
         <div id="content" class="panel">
             <h2>Website Content</h2>
-            <div class="form-group"><label>Hero Title (e.g. PORTFOLIO)</label><input type="text" id="hero-title"></div>
+            <div class="form-group"><label>Hero Title</label><input type="text" id="hero-title"></div>
             <div class="form-group"><label>Hero Description</label><textarea id="hero-desc"></textarea></div>
             <div class="form-group"><label>About Bio</label><textarea id="about-bio"></textarea></div>
             <div class="form-group"><label>About Avatar Image URL</label><input type="text" id="about-avatar"></div>
             <button class="save-btn" onclick="updateWebsiteContent()">Save Content</button>
         </div>
 
-        <div id="portfolio" class="panel">
-            <h2>Portfolio Management</h2>
-            <textarea id="portfolio-json" style="font-family: monospace; min-height: 300px;"></textarea>
-            <button class="save-btn" onclick="updatePortfolio()">Save Portfolio</button>
+        <div id="sections" class="panel">
+            <h2>Sections Management (JSON)</h2>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Advanced editor for dynamic arrays. Follow existing JSON structure carefully.</p>
+            
+            <div class="form-group">
+                <label>Portfolio Array</label>
+                <textarea id="portfolio-json" style="font-family: monospace; min-height: 150px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Process Steps Array</label>
+                <textarea id="process-json" style="font-family: monospace; min-height: 150px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Features Array (Why Choose Me)</label>
+                <textarea id="features-json" style="font-family: monospace; min-height: 150px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Testimonials Array</label>
+                <textarea id="testimonials-json" style="font-family: monospace; min-height: 150px;"></textarea>
+            </div>
+            <button class="save-btn" onclick="updateSections()">Save All Sections</button>
         </div>
 
         <div id="social" class="panel">
@@ -123,6 +140,7 @@
             <h2>Theme Colors</h2>
             <div class="form-group"><label>Background Color (Hex)</label><input type="text" id="theme-bg"></div>
             <div class="form-group"><label>Accent Color (Hex)</label><input type="text" id="theme-accent"></div>
+            <div class="form-group"><label>Feature Card Bg (Hex)</label><input type="text" id="theme-feature"></div>
             <button class="save-btn" onclick="updateTheme()">Save Theme</button>
         </div>
 
@@ -167,6 +185,9 @@
             document.getElementById('about-avatar').value = adminData.about.avatar || '';
             
             document.getElementById('portfolio-json').value = JSON.stringify(adminData.portfolio, null, 2);
+            document.getElementById('process-json').value = JSON.stringify(adminData.process, null, 2);
+            document.getElementById('features-json').value = JSON.stringify(adminData.features, null, 2);
+            document.getElementById('testimonials-json').value = JSON.stringify(adminData.testimonials, null, 2);
             
             document.getElementById('social-discord').value = adminData.social.discord || '';
             document.getElementById('social-instagram').value = adminData.social.instagram || '';
@@ -175,6 +196,7 @@
             
             document.getElementById('theme-bg').value = adminData.theme.backgroundColor || '';
             document.getElementById('theme-accent').value = adminData.theme.accentColor || '';
+            document.getElementById('theme-feature').value = adminData.theme.featureColor || '';
         }
 
         function renderTasks() {
@@ -209,9 +231,7 @@
             });
         }
 
-        function toggleTask(id) {
-            document.getElementById(`task-body-${id}`).classList.toggle('open');
-        }
+        function toggleTask(id) { document.getElementById(`task-body-${id}`).classList.toggle('open'); }
 
         function markTaskComplete(id) {
             if(confirm("Delete this inquiry?")) {
@@ -228,12 +248,16 @@
             saveData();
         }
 
-        function updatePortfolio() {
+        function updateSections() {
             try {
                 adminData.portfolio = JSON.parse(document.getElementById('portfolio-json').value);
+                adminData.process = JSON.parse(document.getElementById('process-json').value);
+                adminData.features = JSON.parse(document.getElementById('features-json').value);
+                adminData.testimonials = JSON.parse(document.getElementById('testimonials-json').value);
+                
                 document.getElementById('stat-proj').innerText = adminData.portfolio.length;
                 saveData();
-            } catch (e) { alert("Invalid JSON format!"); }
+            } catch (e) { alert("Invalid JSON format in one of the fields!"); }
         }
 
         function updateSocial() {
@@ -247,6 +271,7 @@
         function updateTheme() {
             adminData.theme.backgroundColor = document.getElementById('theme-bg').value;
             adminData.theme.accentColor = document.getElementById('theme-accent').value;
+            adminData.theme.featureColor = document.getElementById('theme-feature').value;
             saveData();
         }
 
