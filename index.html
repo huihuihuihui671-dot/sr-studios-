@@ -4,19 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SR STUDIOS | Sarthak Raj</title>
-    <meta name="description" content="Portfolio of Sarthak Raj - Graphic Designer, Thumbnail Designer, and Discord Developer.">
     <style>
         /* Base & Theme */
         :root {
-            --bg: #fcfaf5;
-            --accent: #6b8e23;
-            --text: #111111;
-            --card: #ffffff;
+            --bg: #fcfaf5; --accent: #6b8e23; --text: #111111; --card: #ffffff;
             --font-main: 'Segoe UI', system-ui, sans-serif;
             --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font-main); overflow-x: hidden; }
+        body { background-color: var(--bg); color: var(--text); font-family: var(--font-main); overflow-x: hidden; position: relative; }
         a { text-decoration: none; color: inherit; }
         
         /* Custom Cursor */
@@ -25,15 +21,28 @@
         .hover-target:hover ~ #cursor-ring { width: 60px; height: 60px; background: rgba(107, 142, 35, 0.1); border-color: var(--accent); }
 
         /* Loader */
-        #loader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--text); color: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); }
+        #loader { position: fixed; inset: 0; background: var(--text); color: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); }
         .loader-text { font-size: 3rem; font-weight: 800; letter-spacing: 5px; animation: pulse 1.5s infinite; }
         
-        /* Doodles */
-        .doodle { position: absolute; pointer-events: none; opacity: 0.6; z-index: 0; }
-        .d1 { top: 15%; left: 10%; animation: float 6s ease-in-out infinite; }
-        .d2 { top: 40%; right: 15%; animation: float 8s ease-in-out infinite reverse; }
-        .d3 { bottom: 20%; left: 20%; animation: float 7s ease-in-out infinite; }
+        /* Artistic Doodles */
+        .doodle { position: absolute; pointer-events: none; opacity: 0.4; z-index: 0; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s ease forwards, floatDoodle 6s ease-in-out infinite; }
+        .d-star { width: 50px; fill: none; stroke: var(--text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .d-scribble { width: 120px; fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+        .d-circle { width: 80px; fill: none; stroke: var(--text); stroke-width: 2; stroke-dasharray: 8 8; }
+        .d-heart { width: 40px; fill: none; stroke: #ff4757; stroke-width: 2; }
         
+        /* Doodle Placements */
+        .p1 { top: 15%; left: 10%; animation-delay: 0s, 0s; }
+        .p2 { top: 30%; right: 15%; animation-delay: 0.2s, 1s; }
+        .p3 { top: 60%; left: 5%; transform: rotate(-20deg); animation-delay: 0.4s, 2s; }
+        .p4 { bottom: 10%; right: 10%; transform: rotate(15deg); animation-delay: 0.6s, 1.5s; }
+        .p5 { top: 20%; left: 50%; animation-delay: 0.8s, 0.5s; }
+        .p6 { top: 80%; left: 40%; animation-delay: 0.5s, 2.5s; }
+
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        @keyframes floatDoodle { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
         /* Layout & Typography */
         .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; position: relative; z-index: 1; }
         section { padding: 120px 0; position: relative; }
@@ -42,72 +51,78 @@
         h2::after { content: ''; position: absolute; bottom: 0; left: 0; width: 50%; height: 4px; background: var(--accent); border-radius: 2px; }
         p { font-size: 1.2rem; line-height: 1.6; opacity: 0.8; }
 
-        /* Navbar */
+        /* Navbar & Buttons */
         nav { position: fixed; top: 0; width: 100%; padding: 30px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: difference; color: #fff; }
         .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; }
-        
+        .btn-collab { background: var(--accent); color: #fff; padding: 12px 28px; border: none; border-radius: 50px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: transform 0.3s; pointer-events: auto; }
+        .btn-collab:hover { transform: scale(1.05); }
+
         /* Hero */
         .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 100px; }
         .roles { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
-        .role-pill { padding: 10px 20px; border: 1px solid var(--text); border-radius: 50px; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; }
+        .role-pill { padding: 10px 20px; border: 1px solid var(--text); border-radius: 50px; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; background: var(--card); }
         
         /* Animations */
         .reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-20px) rotate(10deg); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* Services */
+        /* Services & Portfolio */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .service-card { background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: var(--transition); border: 1px solid rgba(0,0,0,0.05); }
         .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--accent); }
-        .service-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
-
-        /* Portfolio */
+        
         .filters { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; }
-        .filter-btn { padding: 10px 25px; border: none; background: transparent; border: 1px solid var(--text); border-radius: 50px; font-weight: 600; transition: var(--transition); }
+        .filter-btn { padding: 10px 25px; background: transparent; border: 1px solid var(--text); border-radius: 50px; font-weight: 600; transition: var(--transition); }
         .filter-btn.active, .filter-btn:hover { background: var(--text); color: var(--bg); }
+        
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 40px; }
         .portfolio-item { position: relative; border-radius: 20px; overflow: hidden; transform-style: preserve-3d; transform: perspective(1000px); }
         .portfolio-item img { width: 100%; height: 250px; object-fit: cover; transition: transform 0.6s ease; display: block; }
-        .portfolio-info { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; transition: bottom 0.4s ease; }
+        .portfolio-info { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; transition: bottom 0.4s ease; pointer-events: none;}
         .portfolio-item:hover img { transform: scale(1.1); }
         .portfolio-item:hover .portfolio-info { bottom: 0; }
 
-        /* Stats */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; }
-        .stat-item h4 { font-size: 4rem; color: var(--accent); font-weight: 900; }
-        
-        /* Footer */
-        footer { padding: 60px 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); }
-        .social-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
-        .social-links a { font-weight: bold; text-transform: uppercase; transition: color 0.3s; }
-        .social-links a:hover { color: var(--accent); }
+        /* Footer & Social Icons */
+        footer { padding: 60px 0; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); position: relative; }
+        .social-links { display: flex; justify-content: center; gap: 30px; margin-top: 30px; }
+        .social-icon { width: 35px; height: 35px; fill: var(--text); transition: var(--transition); }
+        .social-links a:hover .social-icon { fill: var(--accent); transform: translateY(-5px); }
 
-        @media(max-width: 768px) {
-            h1 { font-size: 3rem; }
-            section { padding: 80px 0; }
-            .portfolio-grid { grid-template-columns: 1fr; }
-            #cursor-dot, #cursor-ring { display: none; }
-            * { cursor: auto; }
-        }
+        /* Modal popup */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 10001; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; pointer-events: auto; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: var(--bg); padding: 50px; border-radius: 24px; width: 90%; max-width: 500px; position: relative; transform: translateY(50px); transition: transform 0.4s; box-shadow: 0 25px 50px rgba(0,0,0,0.2); border: 2px solid var(--text); }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2rem; background: none; border: none; font-weight: bold; color: var(--text); }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 15px; border: 2px solid var(--text); border-radius: 12px; background: var(--card); color: var(--text); font-family: inherit; font-size: 1rem; outline: none; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        .submit-btn { width: 100%; padding: 15px; background: var(--text); color: var(--bg); border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; transition: background 0.3s; }
+        .submit-btn:hover { background: var(--accent); }
+
+        @media(max-width: 768px) { h1 { font-size: 3rem; } .portfolio-grid { grid-template-columns: 1fr; } #cursor-dot, #cursor-ring { display: none; } * { cursor: auto !important; } }
     </style>
 </head>
 <body>
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
 
-    <div id="loader">
-        <div class="loader-text">SR STUDIOS</div>
-    </div>
+    <div id="loader"><div class="loader-text">SR STUDIOS</div></div>
+
+    <svg class="doodle d-scribble p1" viewBox="0 0 100 50"><path d="M10,25 Q30,5 50,25 T90,25"/></svg>
+    <svg class="doodle d-star p2" viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9"/></svg>
+    <svg class="doodle d-circle p3" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40"/></svg>
+    <svg class="doodle d-heart p4" viewBox="0 0 24 24"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.28 2,8.5C2,5.42 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.09C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.42 22,8.5C22,12.28 18.6,15.36 13.45,20.04L12,21.35Z"/></svg>
+    <svg class="doodle d-star p5" viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9"/></svg>
+    <svg class="doodle d-scribble p6" viewBox="0 0 100 50"><path d="M10,40 Q30,10 50,30 T90,10"/></svg>
 
     <nav>
         <div class="logo">SR.</div>
-        <div>Sarthak Raj</div>
+        <button class="btn-collab hover-target" onclick="openModal()">Hire Me</button>
     </nav>
-
-    <svg class="doodle d1" width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"><path d="M50 10 C 20 40, 80 60, 50 90" stroke-linecap="round"/><circle cx="50" cy="50" r="40" stroke-dasharray="10 10"/></svg>
-    <svg class="doodle d2" width="80" height="80" viewBox="0 0 100 100" fill="none" stroke="var(--accent)" stroke-width="3"><polygon points="50,10 61,39 92,39 67,58 76,89 50,70 24,89 33,58 8,39 39,39"/></svg>
 
     <section class="hero hover-target" id="hero">
         <div class="container">
@@ -142,31 +157,55 @@
             <button class="filter-btn hover-target" data-filter="Tech">Tech</button>
             <button class="filter-btn hover-target" data-filter="Documentary">Documentary</button>
             <button class="filter-btn hover-target" data-filter="AI">AI</button>
-            <button class="filter-btn hover-target" data-filter="YouTube">YouTube</button>
         </div>
         <div class="portfolio-grid" id="portfolio-grid"></div>
-    </section>
-
-    <section id="stats" class="container reveal">
-        <div class="stats-grid" id="stats-grid"></div>
     </section>
 
     <footer class="hover-target">
         <div class="container reveal">
             <h2>Let's Collaborate</h2>
             <p>Ready to elevate your visual identity?</p>
-            <div class="social-links" id="social-links"></div>
-            <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.5;">© 2026 SR Studios. Built dynamically.</p>
+            <div class="social-links" id="social-links">
+                </div>
+            <p style="margin-top: 50px; font-size: 0.9rem; opacity: 0.5;">© 2026 SR Studios. Built dynamically.</p>
         </div>
     </footer>
 
+    <div class="modal-overlay" id="collab-modal">
+        <div class="modal-content">
+            <button class="close-btn hover-target" onclick="closeModal()">&times;</button>
+            <h2 style="font-size: 2rem; margin-bottom: 10px;">Start a Project</h2>
+            <p style="margin-bottom: 20px; font-size: 1rem;">Tell me about your requirements.</p>
+            
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="client-name" class="hover-target" placeholder="John Doe">
+            </div>
+            <div class="form-group">
+                <label>Your Email / Discord ID</label>
+                <input type="text" id="client-contact" class="hover-target" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>Project Details</label>
+                <textarea id="client-details" class="hover-target" placeholder="I need a thumbnail for..."></textarea>
+            </div>
+            <button class="submit-btn hover-target" onclick="submitProject()">Send Inquiry</button>
+        </div>
+    </div>
+
     <script>
-        // Data Management - Future Ready Architecture
         const DATA_KEY = 'sr_studios_data';
         let siteData = {};
 
+        // SVGs for social media
+        const icons = {
+            instagram: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.88z"/></svg>`,
+            discord: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>`,
+            youtube: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+            email: `<svg class="social-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`
+        };
+
         async function loadData() {
-            // Priority: localStorage > data.json
             const localData = localStorage.getItem(DATA_KEY);
             if (localData) {
                 siteData = JSON.parse(localData);
@@ -176,167 +215,122 @@
                     const res = await fetch('data.json');
                     if(res.ok) {
                         siteData = await res.json();
+                        if(!siteData.tasks) siteData.tasks = []; // Ensure tasks array exists
                         localStorage.setItem(DATA_KEY, JSON.stringify(siteData));
                         renderWebsite();
                     } else throw new Error("Fetch failed");
                 } catch (e) {
-                    console.log("Using fallback dummy data due to local file restrictions.");
-                    // Fallback to ensure it works even without a server
-                    siteData = {
-                        "theme": {"backgroundColor": "#fcfaf5", "accentColor": "#6b8e23", "textColor": "#111111"},
-                        "hero": { "title": "SR STUDIOS", "roles": ["Designer", "Dev"], "description": "Premium aesthetics." },
-                        "about": { "bio": "Creative designer from the UK.", "tools": ["PS", "AE"] },
-                        "services": [{ "title": "Thumbnails", "desc": "High CTR" }],
-                        "portfolio": [
-                            { "id":1, "title":"Doma Live Stream", "category":"BGMI", "image":"https://placehold.co/800x450/111/fff?text=Doma+Live" },
-                            { "id":2, "title":"Rani Priya Wedding", "category":"Documentary", "image":"https://placehold.co/800x450/111/fff?text=Wedding" }
-                        ],
-                        "stats": [{ "label":"Projects", "value":"150+" }],
-                        "social": { "discord": "sarthakraj7269357", "email": "hello@srstudios.com" }
-                    };
+                    siteData = { theme: {backgroundColor: "#fcfaf5", accentColor: "#6b8e23", textColor: "#111111"}, hero: { title: "SR STUDIOS", roles: ["Designer"], description: "Premium aesthetics." }, about: { bio: "Creative designer.", tools: ["PS"] }, services: [], portfolio: [], social: { discord: "sarthakraj", email: "hello@srstudios.com" }, tasks: [] };
                     renderWebsite();
                 }
             }
         }
 
-        function applyTheme() {
+        function renderWebsite() {
             if(siteData.theme) {
                 document.documentElement.style.setProperty('--bg', siteData.theme.backgroundColor);
                 document.documentElement.style.setProperty('--accent', siteData.theme.accentColor);
                 document.documentElement.style.setProperty('--text', siteData.theme.textColor);
             }
-        }
-
-        function renderWebsite() {
-            applyTheme();
             
-            // Hero
             document.getElementById('hero-title').textContent = siteData.hero.title;
             document.getElementById('hero-desc').textContent = siteData.hero.description;
-            const rolesContainer = document.getElementById('hero-roles');
-            rolesContainer.innerHTML = '';
-            siteData.hero.roles.forEach(role => {
-                rolesContainer.innerHTML += `<div class="role-pill">${role}</div>`;
-            });
-
-            // About
+            document.getElementById('hero-roles').innerHTML = siteData.hero.roles.map(r => `<div class="role-pill">${r}</div>`).join('');
+            
             document.getElementById('about-bio').textContent = siteData.about.bio;
-            const toolsContainer = document.getElementById('about-tools');
-            toolsContainer.innerHTML = '';
-            siteData.about.tools.forEach(tool => {
-                toolsContainer.innerHTML += `<div class="role-pill">${tool}</div>`;
-            });
-
-            // Services
-            const srvGrid = document.getElementById('services-grid');
-            srvGrid.innerHTML = '';
-            siteData.services.forEach(srv => {
-                srvGrid.innerHTML += `<div class="service-card hover-target"><h3>${srv.title}</h3><p>${srv.desc}</p></div>`;
-            });
-
-            // Portfolio
+            document.getElementById('about-tools').innerHTML = siteData.about.tools.map(t => `<div class="role-pill">${t}</div>`).join('');
+            
+            document.getElementById('services-grid').innerHTML = siteData.services.map(s => `<div class="service-card hover-target"><h3>${s.title}</h3><p>${s.desc}</p></div>`).join('');
+            
             renderPortfolio('all');
 
-            // Stats
-            const statsGrid = document.getElementById('stats-grid');
-            statsGrid.innerHTML = '';
-            siteData.stats.forEach(stat => {
-                statsGrid.innerHTML += `<div class="stat-item"><h4>${stat.value}</h4><p>${stat.label}</p></div>`;
-            });
-
-            // Socials
             const socContainer = document.getElementById('social-links');
             socContainer.innerHTML = `
-                ${siteData.social.instagram ? `<a href="${siteData.social.instagram}" target="_blank" class="hover-target">Instagram</a>` : ''}
-                ${siteData.social.youtube ? `<a href="${siteData.social.youtube}" target="_blank" class="hover-target">YouTube</a>` : ''}
-                <a href="mailto:${siteData.social.email}" class="hover-target">Email</a>
-                <a href="#" class="hover-target">Discord: ${siteData.social.discord}</a>
+                ${siteData.social.instagram ? `<a href="${siteData.social.instagram}" target="_blank" class="hover-target" title="Instagram">${icons.instagram}</a>` : ''}
+                ${siteData.social.youtube ? `<a href="${siteData.social.youtube}" target="_blank" class="hover-target" title="YouTube">${icons.youtube}</a>` : ''}
+                <a href="mailto:${siteData.social.email}" class="hover-target" title="Email">${icons.email}</a>
+                <a href="#" class="hover-target" title="Discord: ${siteData.social.discord}" onclick="alert('Discord ID: ${siteData.social.discord}')">${icons.discord}</a>
             `;
 
-            // Trigger animations
             setTimeout(initAnimations, 100);
         }
 
         function renderPortfolio(filter) {
             const grid = document.getElementById('portfolio-grid');
-            grid.innerHTML = '';
             const items = filter === 'all' ? siteData.portfolio : siteData.portfolio.filter(p => p.category === filter);
-            
-            items.forEach(item => {
-                grid.innerHTML += `
-                    <div class="portfolio-item hover-target" data-category="${item.category}">
-                        <img src="${item.image}" alt="${item.title}">
-                        <div class="portfolio-info">
-                            <h3 style="font-size:1.5rem">${item.title}</h3>
-                            <p style="color:var(--accent); font-weight:bold">${item.category}</p>
-                        </div>
+            grid.innerHTML = items.map(item => `
+                <div class="portfolio-item hover-target">
+                    <img src="${item.image}" alt="${item.title}">
+                    <div class="portfolio-info">
+                        <h3 style="font-size:1.5rem">${item.title}</h3>
+                        <p style="color:var(--accent); font-weight:bold">${item.category}</p>
                     </div>
-                `;
-            });
-
-            // Re-bind 3D tilt
+                </div>
+            `).join('');
             bind3DTilt();
         }
 
-        // Interactivity & Animations
+        // --- Interaction & Form Logic ---
+        function openModal() { document.getElementById('collab-modal').classList.add('active'); }
+        function closeModal() { document.getElementById('collab-modal').classList.remove('active'); }
+
+        function submitProject() {
+            const name = document.getElementById('client-name').value.trim();
+            const contact = document.getElementById('client-contact').value.trim();
+            const details = document.getElementById('client-details').value.trim();
+
+            if(!name || !contact || !details) return alert("Please fill all details so I can understand your project!");
+
+            const newTask = {
+                id: Date.now(),
+                name: name,
+                contact: contact,
+                details: details,
+                status: 'Pending Inquiry',
+                date: new Date().toLocaleDateString()
+            };
+
+            // Pull fresh data, append task, save back
+            let currentData = JSON.parse(localStorage.getItem(DATA_KEY)) || siteData;
+            if(!currentData.tasks) currentData.tasks = [];
+            currentData.tasks.push(newTask);
+            
+            localStorage.setItem(DATA_KEY, JSON.stringify(currentData));
+            
+            alert("Project details submitted successfully! Sarthak will reach out to you soon.");
+            closeModal();
+            
+            // clear form
+            document.getElementById('client-name').value = '';
+            document.getElementById('client-contact').value = '';
+            document.getElementById('client-details').value = '';
+        }
+
         function initAnimations() {
-            // Remove Loader
-            setTimeout(() => {
-                document.getElementById('loader').style.transform = 'translateY(-100%)';
-            }, 800);
-
-            // Scroll Reveal
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, { threshold: 0.1 });
-
+            setTimeout(() => document.getElementById('loader').style.transform = 'translateY(-100%)', 800);
+            const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }), { threshold: 0.1 });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
         // Custom Cursor
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorRing = document.getElementById('cursor-ring');
-        let mouseX = 0, mouseY = 0;
-        let ringX = 0, ringY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-        });
-
-        function animateCursor() {
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
-            cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
-            requestAnimationFrame(animateCursor);
-        }
+        const cursorDot = document.getElementById('cursor-dot'), cursorRing = document.getElementById('cursor-ring');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px)`; });
+        function animateCursor() { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`; requestAnimationFrame(animateCursor); }
         animateCursor();
 
-        // 3D Tilt Effect on Portfolio Cards
         function bind3DTilt() {
             document.querySelectorAll('.portfolio-item').forEach(card => {
                 card.addEventListener('mousemove', e => {
                     const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -10;
-                    const rotateY = ((x - centerX) / centerX) * 10;
+                    const rotateX = (((e.clientY - rect.top) - (rect.height / 2)) / (rect.height / 2)) * -10;
+                    const rotateY = (((e.clientX - rect.left) - (rect.width / 2)) / (rect.width / 2)) * 10;
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
                 });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                });
+                card.addEventListener('mouseleave', () => card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`);
             });
         }
 
-        // Filter functionality
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -345,7 +339,6 @@
             });
         });
 
-        // Init
         window.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>

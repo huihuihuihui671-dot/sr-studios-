@@ -22,47 +22,21 @@
     { "title": "Discord Development", "desc": "Professional server setup, custom bot integration, and community structuring." }
   ],
   "portfolio": [
-    {
-      "id": 1,
-      "title": "Doma Live New Year Stream",
-      "category": "BGMI",
-      "image": "https://placehold.co/800x450/111/fff?text=Doma+Live+BGMI"
-    },
-    {
-      "id": 2,
-      "title": "Rani Priya & Rajnish Invites",
-      "category": "Documentary",
-      "image": "https://placehold.co/800x450/111/fff?text=Cinematic+Wedding"
-    },
-    {
-      "id": 3,
-      "title": "Tech Review Concept",
-      "category": "Tech",
-      "image": "https://placehold.co/800x450/111/fff?text=Tech+Review"
-    },
-    {
-      "id": 4,
-      "title": "AI Portrait Generation",
-      "category": "AI",
-      "image": "https://placehold.co/800x450/111/fff?text=AI+Artwork"
-    }
+    { "id": 1, "title": "Doma Live New Year Stream", "category": "BGMI", "image": "https://placehold.co/800x450/111/fff?text=Doma+Live+BGMI" },
+    { "id": 2, "title": "Rani Priya & Rajnish Invites", "category": "Documentary", "image": "https://placehold.co/800x450/111/fff?text=Cinematic+Wedding" },
+    { "id": 3, "title": "Tech Review Concept", "category": "Tech", "image": "https://placehold.co/800x450/111/fff?text=Tech+Review" },
+    { "id": 4, "title": "AI Portrait Generation", "category": "AI", "image": "https://placehold.co/800x450/111/fff?text=AI+Artwork" }
   ],
   "stats": [
     { "label": "Projects Completed", "value": "150+" },
     { "label": "Happy Clients", "value": "45+" },
     { "label": "Avg. CTR Boost", "value": "30%" }
   ],
-  "testimonials": [
-    {
-      "name": "Creator X",
-      "text": "Sarthak's thumbnails completely changed my channel's trajectory. The CTR is insane!",
-      "role": "Gaming YouTuber"
-    }
-  ],
   "social": {
     "instagram": "https://instagram.com/",
     "discord": "sarthakraj7269357",
     "email": "hello@srstudios.com",
     "youtube": "https://youtube.com/"
-  }
+  },
+  "tasks": []
 }
