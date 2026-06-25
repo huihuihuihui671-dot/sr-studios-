@@ -20,13 +20,13 @@
   "why_choose_me": [
     { "id": 1, "title": "A/B Testing Ready", "description": "Multiple versions to test which works.", "icon": "lightning", "color": "#e8f4dd", "enabled": true, "order": 1, "createdAt": "", "updatedAt": "" },
     { "id": 2, "title": "Unlimited Revisions", "description": "Until you're 100% satisfied with the result.", "icon": "badge", "color": "#e8f4dd", "enabled": true, "order": 2, "createdAt": "", "updatedAt": "" },
-    { "id": 3, "title": "24-48Hr Delivery", "description": "Fast turnaround without sacrificing quality.", "icon": "clock", "color": "#e8f4dd", "enabled": true, "order": 3, "createdAt": "", "updatedAt": "" },
+    { "id": 3, "title": "24-48hr Delivery", "description": "Fast turnaround without sacrificing quality.", "icon": "clock", "color": "#e8f4dd", "enabled": true, "order": 3, "createdAt": "", "updatedAt": "" },
     { "id": 4, "title": "High-CTR Thumbnails", "description": "Designed to maximize clicks and watch time.", "icon": "cursor", "color": "#e8f4dd", "enabled": true, "order": 4, "createdAt": "", "updatedAt": "" }
   ],
   "process_steps": [
-    { "id": 1, "stepNumber": "STEP-01", "title": "Understanding Your Content", "description": "I analyze your content, niche, audience, and competitors to understand what attracts viewers and drives clicks.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+1", "imageCaption": "Analysis", "imageAlt": "Analysis Step", "enabled": true, "order": 1, "createdAt": "", "updatedAt": "" },
-    { "id": 2, "stepNumber": "STEP-02", "title": "Concept & Layout Planning", "description": "I create a visual concept, plan the composition, text hierarchy, focal points, and thumbnail strategy.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+2", "imageCaption": "Planning", "imageAlt": "Planning Step", "enabled": true, "order": 2, "createdAt": "", "updatedAt": "" },
-    { "id": 3, "stepNumber": "STEP-03", "title": "Final Thumbnail Creation", "description": "I design the final thumbnail with strong contrast, storytelling, visual hooks, and CTR-focused elements.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+3", "imageCaption": "Final Design", "imageAlt": "Final Step", "enabled": true, "order": 3, "createdAt": "", "updatedAt": "" }
+    { "id": 1, "stepNumber": "STEP-01", "title": "Understanding Your Content", "description": "I start by analyzing top performing thumbnails in your niche to understand what works.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+1", "imageCaption": "Analysis", "imageAlt": "Analysis Step", "enabled": true, "order": 1, "createdAt": "", "updatedAt": "" },
+    { "id": 2, "stepNumber": "STEP-02", "title": "Concept & Layout Planning", "description": "I create a rough sketch to plan the layout and message.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+2", "imageCaption": "Planning", "imageAlt": "Planning Step", "enabled": true, "order": 2, "createdAt": "", "updatedAt": "" },
+    { "id": 3, "stepNumber": "STEP-03", "title": "Final Thumbnail Creation", "description": "I design the thumbnail with high-contrast visuals and clean effects for maximum clicks.", "image": "https://placehold.co/800x450/e3e1d9/7c9458?text=Image+3", "imageCaption": "Final Design", "imageAlt": "Final Step", "enabled": true, "order": 3, "createdAt": "", "updatedAt": "" }
   ],
   "services": [
     { "title": "Thumbnail Design", "desc": "High-CTR, attention-grabbing thumbnails engineered for the YouTube algorithm." }
