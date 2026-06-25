@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SR Studios Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="padding: 50px;">
+    <h2>Admin Dashboard</h2>
+    
+    <div class="admin-panel">
+        <h3>Add New Portfolio Item</h3>
+        <input type="text" id="projTitle" placeholder="Project Title">
+        <select id="projCategory">
+            <option value="thumbnails">Thumbnail</option>
+            <option value="overlays">Overlay</option>
+            <option value="discord">Discord</option>
+        </select>
+        <input type="text" id="projImage" placeholder="Image Path (e.g., assets/thumbnails/1.jpg)">
+        <button onclick="addProject()" class="btn primary">Add Project</button>
+        
+        <hr style="margin: 30px 0;">
+        
+        <h3>Generated JSON (Copy & paste into data/portfolio.json)</h3>
+        <textarea id="jsonOutput" style="width: 100%; height: 200px; background: #222; color: #fff;"></textarea>
+    </div>
+
+    <script>
+        let portfolioData = [];
+
+        // Load existing data
+        fetch('../data/portfolio.json')
+            .then(res => res.json())
+            .then(data => {
+                portfolioData = data;
+                document.getElementById('jsonOutput').value = JSON.stringify(portfolioData, null, 4);
+            });
+
+        function addProject() {
+            const title = document.getElementById('projTitle').value;
+            const category = document.getElementById('projCategory').value;
+            const image = document.getElementById('projImage').value;
+
+            const newProject = {
+                id: Date.now(),
+                title: title,
+                category: category,
+                image: image,
+                link: "#"
+            };
+
+            portfolioData.push(newProject);
+            
+            // Output the new JSON for the user to copy
+            document.getElementById('jsonOutput').value = JSON.stringify(portfolioData, null, 4);
+            alert("Project added! Copy the code from the text box and paste it into data/portfolio.json");
+        }
+    </script>
+</body>
+</html>

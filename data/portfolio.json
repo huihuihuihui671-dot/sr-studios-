@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "title": "MrBeast Style Thumbnail",
+        "category": "thumbnails",
+        "image": "assets/thumbnails/thumb1.jpg",
+        "link": "#"
+    },
+    {
+        "id": 2,
+        "title": "Valorant Stream Overlay",
+        "category": "overlays",
+        "image": "assets/overlays/overlay1.png",
+        "link": "#"
+    }
+]
