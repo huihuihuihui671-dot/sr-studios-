@@ -1,36 +1,36 @@
 {
   "theme": {
-    "backgroundColor": "#fcfaf5",
-    "accentColor": "#6b8e23",
-    "textColor": "#111111",
+    "backgroundColor": "#e6e2d6",
+    "accentColor": "#658345",
+    "textColor": "#1c1c1c",
     "cardColor": "#ffffff"
   },
   "hero": {
-    "title": "SR STUDIOS",
-    "name": "Sarthak Raj",
-    "roles": ["Graphic Designer", "Thumbnail Designer", "Discord Developer"],
-    "description": "Crafting premium visuals and high-converting thumbnails for creators worldwide."
+    "title": "PORTFOLIO",
+    "name": "SR STUDIOS",
+    "subtitle": "Thumbnail designer",
+    "avatar": "https://api.dicebear.com/8.x/miniavs/svg?seed=Felix&backgroundColor=transparent"
   },
   "about": {
-    "bio": "I am a multi-disciplinary designer specializing in high-CTR thumbnails, stream assets, and Discord development. I blend artistic creativity with strategic design to help creators and brands stand out.",
-    "experience": "5+ Years",
-    "tools": ["Photoshop", "Illustrator", "Figma", "After Effects"]
+    "title": "ABOUT ME",
+    "bio": "Hey! I'm Sarthak, a thumbnail designer who loves turning ideas into scroll-stopping visuals 🎯\n\nI design YouTube thumbnails that are clean, clickable, and built to perform.",
+    "toolsTitle": "TOOLS I USE-",
+    "tools": [
+      { "name": "Ps", "color": "#00a8ff" },
+      { "name": "Ai", "color": "#ff9f43" },
+      { "name": "Pr", "color": "#ee5253" },
+      { "name": "Ae", "color": "#5f27cd" }
+    ],
+    "avatar": "https://api.dicebear.com/8.x/adventurer/svg?seed=Sarthak&backgroundColor=transparent",
+    "labels": ["GRAPHIC DESIGNER", "YOUTUBE"]
   },
   "services": [
     { "title": "Thumbnail Design", "desc": "High-CTR, attention-grabbing thumbnails engineered for the YouTube algorithm." },
-    { "title": "Stream Assets", "desc": "Custom overlays, alerts, and branding packages to elevate your live streams." },
-    { "title": "Discord Development", "desc": "Professional server setup, custom bot integration, and community structuring." }
+    { "title": "Stream Assets", "desc": "Custom overlays, alerts, and branding packages to elevate your live streams." }
   ],
   "portfolio": [
-    { "id": 1, "title": "Doma Live New Year Stream", "category": "BGMI", "image": "https://placehold.co/800x450/111/fff?text=Doma+Live+BGMI" },
-    { "id": 2, "title": "Rani Priya & Rajnish Invites", "category": "Documentary", "image": "https://placehold.co/800x450/111/fff?text=Cinematic+Wedding" },
-    { "id": 3, "title": "Tech Review Concept", "category": "Tech", "image": "https://placehold.co/800x450/111/fff?text=Tech+Review" },
-    { "id": 4, "title": "AI Portrait Generation", "category": "AI", "image": "https://placehold.co/800x450/111/fff?text=AI+Artwork" }
-  ],
-  "stats": [
-    { "label": "Projects Completed", "value": "150+" },
-    { "label": "Happy Clients", "value": "45+" },
-    { "label": "Avg. CTR Boost", "value": "30%" }
+    { "id": 1, "title": "Gaming Highlights", "category": "Gaming", "image": "https://placehold.co/800x450/222/fff?text=Gaming" },
+    { "id": 2, "title": "Documentary Style", "category": "Documentary", "image": "https://placehold.co/800x450/222/fff?text=Doc+Style" }
   ],
   "social": {
     "instagram": "https://instagram.com/",
