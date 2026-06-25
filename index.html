@@ -49,13 +49,15 @@
         section { padding: 100px 0; position: relative; }
         
         h1 { font-family: var(--font-display); font-size: clamp(5rem, 15vw, 12rem); font-weight: normal; line-height: 0.9; text-transform: uppercase; margin-bottom: 10px; color: var(--text); letter-spacing: -2px; }
-        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header { text-align: center; margin-bottom: 60px; position: relative; z-index: 2;}
+        
         h2 { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5.5rem); font-weight: normal; text-transform: uppercase; position: relative; display: inline-block; letter-spacing: -1px; margin-bottom: 10px;}
-        .underline-dashed { border-bottom: 4px dashed var(--text); padding-bottom: 10px; }
+        .title-dashed { position: relative; display: inline-block; }
+        .title-dashed::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; border-bottom: 6px dashed var(--text); }
         
         .doodle-highlight { position: absolute; bottom: 5px; right: -20px; width: 60px; height: 60px; background: var(--accent); z-index: -1; transform: rotate(-10deg); opacity: 0.8; }
         
-        p { font-size: 1.3rem; line-height: 1.6; color: #333; font-weight: 500; }
+        p { font-size: 1.2rem; line-height: 1.6; color: #333; font-weight: 500; }
 
         /* Navbar */
         nav { position: fixed; top: 20px; left: 5%; right: 5%; border: 2px dashed var(--accent); display: flex; align-items: stretch; z-index: 100; background: var(--bg); color: var(--text); font-family: var(--font-display); text-transform: uppercase; }
@@ -100,22 +102,26 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* Process Section */
-        .process-grid { display: flex; flex-direction: column; gap: 30px; }
+        .process-grid { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 2;}
         @media(min-width: 900px) { .process-grid { flex-direction: row; align-items: stretch; justify-content: space-between; } }
-        .process-card { flex: 1; text-align: center; position: relative; padding: 20px;}
-        .process-card img { width: 100%; border-radius: 20px; border: 3px dashed var(--text); box-shadow: 6px 6px 0 var(--accent); margin-bottom: 20px; transition: var(--transition); background: #fff;}
-        .process-card:hover img { transform: translateY(-5px); box-shadow: 10px 10px 0 var(--accent); }
-        .process-card h3 { font-family: var(--font-display); font-size: 3rem; margin-bottom: 15px; }
-        .process-card p { font-size: 1.1rem; }
-        .process-divider { width: 3px; border-left: 3px dashed var(--text); opacity: 0.5; margin: 0 10px; display: none; }
+        .process-card { flex: 1; text-align: center; position: relative; padding: 10px;}
+        .process-card img { width: 100%; border-radius: 20px; margin-bottom: 20px; transition: var(--transition); background: #fff;}
+        .process-card:hover img { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .process-card h3 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 10px; }
+        
+        .process-divider { width: 2px; border-left: 3px dashed var(--text); opacity: 0.8; margin: 0 15px; display: none; }
         @media(min-width: 900px) { .process-divider { display: block; } }
 
         /* Why Choose Me Section */
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .feature-card { background: var(--feature); padding: 30px; border-radius: 20px; border: 3px solid var(--text); box-shadow: 6px 6px 0 var(--text); transition: var(--transition); }
-        .feature-card:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--accent); border-color: var(--accent);}
-        .feature-icon { font-size: 2.5rem; margin-bottom: 15px; display: inline-block; background: var(--accent); padding: 10px; border-radius: 10px; border: 2px solid var(--text); box-shadow: 3px 3px 0 var(--text);}
-        .feature-card h3 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 10px; letter-spacing: 1px;}
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; position: relative; z-index: 2;}
+        .feature-card { background: var(--feature); padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: var(--transition); text-align: left; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        
+        .feature-icon-box { background: rgba(97, 122, 68, 0.2); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .feature-icon-box svg { width: 24px; height: 24px; fill: var(--accent); }
+        
+        .feature-card h3 { font-family: var(--font-main); font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; color: var(--text); text-transform: none; letter-spacing: 0; }
+        .feature-card p { font-size: 1rem; color: #444; font-weight: 500; line-height: 1.5; }
         
         /* Portfolio */
         .filters { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; justify-content: center;}
@@ -214,12 +220,12 @@
         </div>
     </section>
 
-    <!-- About Me -->
+    <!-- About Me Redesign -->
     <section id="about" class="container reveal hover-target">
         <div class="about-grid">
             <div class="about-text">
-                <div class="section-header" style="text-align:left;">
-                    <h2 class="underline-dashed">ABOUT ME<div class="doodle-highlight"></div></h2>
+                <div class="section-header" style="text-align:left; margin-bottom: 20px;">
+                    <h2 class="title-dashed">ABOUT ME<div class="doodle-highlight"></div></h2>
                 </div>
                 <p id="about-bio"></p>
                 <div class="tools-title">TOOLS I USE-</div>
@@ -238,18 +244,22 @@
 
     <!-- Process Section -->
     <section id="process" class="container reveal">
+        <svg class="doodle float-anim" style="top: 50px; left: 15%; width: 40px;" viewBox="0 0 50 50"><path class="d-star" d="M25 0 L30 15 L45 20 L32 30 L35 45 L25 35 L15 45 L18 30 L5 20 L20 15 Z"/></svg>
+        <svg class="doodle float-anim-alt" style="top: 60px; right: 15%; width: 40px;" viewBox="0 0 50 50"><path class="d-star" d="M25 0 L30 15 L45 20 L32 30 L35 45 L25 35 L15 45 L18 30 L5 20 L20 15 Z"/></svg>
+        
         <div class="section-header">
-            <h2 class="underline-dashed">OUR PROCESS<div class="doodle-highlight" style="background:#eaf5e1;"></div></h2>
-            <svg class="doodle float-anim" style="top: 0; left: 20%; width: 40px;" viewBox="0 0 50 50"><path class="d-star" d="M25 0 L30 15 L45 20 L32 30 L35 45 L25 35 L15 45 L18 30 L5 20 L20 15 Z"/></svg>
+            <h2 class="title-dashed">OUR PROCESS<div class="doodle-highlight" style="background:#eaf5e1;"></div></h2>
         </div>
         <div class="process-grid" id="process-grid"></div>
     </section>
 
     <!-- Why Choose Me -->
     <section id="why-choose-me" class="container reveal">
+        <svg class="doodle float-anim-alt" style="top: 20px; left: 5%; width: 60px;" viewBox="0 0 50 50"><path class="d-star" d="M25 0 L30 15 L45 20 L32 30 L35 45 L25 35 L15 45 L18 30 L5 20 L20 15 Z"/></svg>
+        <svg class="doodle float-anim" style="top: 50px; right: 8%; width: 40px;" viewBox="0 0 50 50"><path class="d-star" d="M25 0 L30 15 L45 20 L32 30 L35 45 L25 35 L15 45 L18 30 L5 20 L20 15 Z"/></svg>
+
         <div class="section-header">
-            <h2 class="underline-dashed">WHY TO CHOOSE ME<div class="doodle-highlight"></div></h2>
-            <svg class="doodle float-anim-alt" style="top: 10px; right: 25%; width: 50px;" viewBox="0 0 50 50"><path class="d-star" d="M25 0 L30 15 L45 20 L32 30 L35 45 L25 35 L15 45 L18 30 L5 20 L20 15 Z"/></svg>
+            <h2 class="title-dashed">WHY TO CHOOSE ME<div class="doodle-highlight"></div></h2>
         </div>
         <div class="features-grid" id="features-grid"></div>
     </section>
@@ -257,7 +267,7 @@
     <!-- Portfolio -->
     <section id="portfolio" class="container reveal">
         <div class="section-header">
-            <h2 class="underline-dashed">PORTFOLIO<div class="doodle-highlight" style="background:var(--text);"></div></h2>
+            <h2 class="title-dashed">PORTFOLIO<div class="doodle-highlight" style="background:var(--text);"></div></h2>
         </div>
         <div class="filters" id="portfolio-filters">
             <button class="filter-btn active hover-target" data-filter="all">All</button>
@@ -273,7 +283,7 @@
     <!-- Testimonials -->
     <section id="testimonials" class="container reveal">
         <div class="section-header">
-            <h2 class="underline-dashed">TESTIMONIALS<div class="doodle-highlight"></div></h2>
+            <h2 class="title-dashed">TESTIMONIALS<div class="doodle-highlight"></div></h2>
         </div>
         <div class="testi-grid" id="testi-grid"></div>
     </section>
@@ -323,12 +333,23 @@
         const DATA_KEY = 'sr_studios_data';
         let siteData = {};
 
-        // SVGs for social media blocks
+        // SVGs for social media & features
         const icons = {
             instagram: `<svg class="social-icon hover-target" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.88z"/></svg>`,
             discord: `<svg class="social-icon hover-target" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>`,
             youtube: `<svg class="social-icon hover-target" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
-            email: `<svg class="social-icon hover-target" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`
+            email: `<svg class="social-icon hover-target" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
+            feature_lightning: `<svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,
+            feature_badge: `<svg viewBox="0 0 24 24"><path d="M12 15.25L16.25 18l-1.1-4.88 3.85-3.32-5.03-.43L12 5l-1.97 4.37-5.03.43 3.85 3.32L7.75 18z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>`,
+            feature_clock: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
+            feature_cursor: `<svg viewBox="0 0 24 24"><path d="M7 2l12 11.2-5.8.5 3.3 7.3-2.25.9-3.2-7.4L7 18.5V2z"/></svg>`
+        };
+
+        const featureSvgMap = {
+            "lightning": icons.feature_lightning,
+            "badge": icons.feature_badge,
+            "clock": icons.feature_clock,
+            "cursor": icons.feature_cursor
         };
 
         async function loadData() {
@@ -388,13 +409,15 @@
 
             // Features (Why Choose Me)
             if(siteData.features) {
-                document.getElementById('features-grid').innerHTML = siteData.features.map(f => `
+                document.getElementById('features-grid').innerHTML = siteData.features.map(f => {
+                    const svgIcon = featureSvgMap[f.icon] || featureSvgMap["lightning"];
+                    return `
                     <div class="feature-card hover-target">
-                        <div class="feature-icon">${f.icon}</div>
+                        <div class="feature-icon-box">${svgIcon}</div>
                         <h3>${f.title}</h3>
                         <p>${f.desc}</p>
                     </div>
-                `).join('');
+                `}).join('');
             }
 
             // Testimonials

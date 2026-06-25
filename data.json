@@ -23,10 +23,10 @@
     { "step": "STEP-03", "desc": "I design the thumbnail with high-contrast visuals and clean effects for maximum clicks.", "image": "https://placehold.co/400x250/617a44/fff?text=Final+Design" }
   ],
   "features": [
-    { "title": "A/B Testing Ready", "desc": "Multiple versions to test which works.", "icon": "⚡" },
-    { "title": "Unlimited Revisions", "desc": "Until you're 100% satisfied with the result.", "icon": "🎖️" },
-    { "title": "24-48hr Delivery", "desc": "Fast turnaround without sacrificing quality.", "icon": "🕒" },
-    { "title": "High-CTR Thumbnails", "desc": "Designed to maximize clicks and watch time.", "icon": "🎯" }
+    { "title": "A/B Testing Ready", "desc": "Multiple versions to test which works.", "icon": "lightning" },
+    { "title": "Unlimited Revisions", "desc": "Until you're 100% satisfied with the result.", "icon": "badge" },
+    { "title": "24-48hr Delivery", "desc": "Fast turnaround without sacrificing quality.", "icon": "clock" },
+    { "title": "High-CTR Thumbnails", "desc": "Designed to maximize clicks and watch time.", "icon": "cursor" }
   ],
   "services": [
     { "title": "Thumbnail Design", "desc": "High-CTR, attention-grabbing thumbnails engineered for the YouTube algorithm." },
