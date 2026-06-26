@@ -53,6 +53,9 @@ app.post('/api/data', async (req, res) => {
         const collection = db.collection('portfolio_data');
         const newData = req.body;
         
+        // 🛑 THE FIX: Remove the immutable MongoDB ID before updating
+        delete newData._id; 
+        
         await collection.updateOne(
             { id: "main_data" }, 
             { $set: newData },
