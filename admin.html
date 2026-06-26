@@ -9,7 +9,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
         
-        /* Login */
         #login-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .login-box { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
         .login-box h2 { margin-bottom: 20px; }
@@ -17,7 +16,6 @@
         button { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: opacity 0.2s; }
         button:hover { opacity: 0.8; }
 
-        /* Layout */
         .sidebar { width: 250px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; }
         .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.2rem; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
         .nav-item { padding: 12px 20px; cursor: pointer; transition: background 0.2s; display: flex; justify-content: space-between; align-items: center; }
@@ -29,12 +27,10 @@
         .panel.active { display: block; }
         .panel h2 { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
         
-        /* Form & List */
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
         textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; min-height: 100px; resize: vertical; }
         
-        /* Task Cards */
         .task-card { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; background: #fafafa; overflow: hidden; }
         .task-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #fff; }
         .task-header:hover { background: #f4f4f5; }
@@ -59,7 +55,7 @@
         </div>
     </div>
 
-    <div id="notification" class="notification">Changes Saved Successfully!</div>
+    <div id="notification" class="notification">Changes Saved to MongoDB!</div>
 
     <div class="sidebar">
         <div class="brand">SR STUDIOS<br><span style="font-size:0.8rem;font-weight:normal;color:#666;">Control Panel</span></div>
@@ -100,7 +96,7 @@
             <div class="form-group"><label>Hero Title</label><input type="text" id="hero-title"></div>
             <div class="form-group"><label>Hero Description</label><textarea id="hero-desc"></textarea></div>
             <div class="form-group"><label>About Bio</label><textarea id="about-bio"></textarea></div>
-            <div class="form-group"><label>About Avatar URL</label><input type="text" id="about-avatar"></div>
+            <div class="form-group"><label>About Avatar Image URL</label><input type="text" id="about-avatar"></div>
             <button class="save-btn" onclick="updateWebsiteContent()">Save Content</button>
         </div>
 
@@ -147,7 +143,6 @@
     </div>
 
     <script>
-        const DATA_KEY = 'sr_studios_data';
         let adminData = {};
 
         function login() {
@@ -157,22 +152,40 @@
             } else alert('Incorrect password');
         }
 
-        function loadData() {
-            const localData = localStorage.getItem(DATA_KEY);
-            if (localData) {
-                adminData = JSON.parse(localData);
+        async function loadData() {
+            try {
+                const response = await fetch('/api/data');
+                if (!response.ok) throw new Error("Server error");
+                
+                adminData = await response.json();
                 if(!adminData.tasks) adminData.tasks = [];
+                
                 populateForms();
                 renderTasks();
-            } else {
-                alert("No data found! Open your main portfolio website first so it creates the database.");
+            } catch (error) {
+                alert("Could not connect to the database. Make sure the server is running.");
+                console.error(error);
             }
         }
 
-        function saveData() {
-            localStorage.setItem(DATA_KEY, JSON.stringify(adminData));
-            showNotification();
-            renderTasks();
+        async function saveData() {
+            try {
+                const response = await fetch('/api/data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(adminData)
+                });
+                
+                if(response.ok) {
+                    showNotification();
+                    renderTasks();
+                } else {
+                    throw new Error("Failed to save");
+                }
+            } catch (error) {
+                alert("Failed to save data globally!");
+                console.error(error);
+            }
         }
 
         function populateForms() {
