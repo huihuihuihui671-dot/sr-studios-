@@ -131,12 +131,19 @@
         .filter-btn.active, .filter-btn:hover { background: var(--text); color: var(--bg); box-shadow: 4px 4px 0 var(--accent); transform: translate(-2px, -2px);}
         
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 40px; }
-        .portfolio-item { position: relative; border-radius: 20px; overflow: hidden; border: 3px solid var(--text); box-shadow: 6px 6px 0 var(--text); transition: transform 0.3s ease; }
+        .portfolio-item { position: relative; border-radius: 20px; overflow: hidden; border: 3px solid var(--text); box-shadow: 6px 6px 0 var(--text); transition: transform 0.3s ease; align-self: start; }
         .portfolio-item img { width: 100%; height: 250px; object-fit: cover; transition: transform 0.6s ease; display: block; }
         .portfolio-info { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 20px; background: rgba(26,26,26,0.9); color: #fff; transition: bottom 0.4s ease; pointer-events: none; border-top: 3px solid var(--accent);}
         .portfolio-item:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--accent); }
         .portfolio-item:hover img { transform: scale(1.05); filter: grayscale(20%); }
         .portfolio-item:hover .portfolio-info { bottom: 0; }
+
+        /* Dynamic Class for Vertical (Overlay) Cards */
+        .portfolio-item.vertical-card img {
+            height: auto;
+            aspect-ratio: 9 / 16;
+            object-fit: cover;
+        }
 
         .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
         .testi-card { background: #fff; padding: 40px; border-radius: 20px; border: 3px dashed var(--accent); box-shadow: 6px 6px 0 var(--text); position: relative; }
@@ -466,12 +473,14 @@
 
         function renderPortfolio(filter) {
             const grid = document.getElementById('portfolio-grid');
+            
+            // Dynamic slice and filter for the portfolio
             const items = filter === 'all' 
                 ? siteData.portfolio.slice(0, 8) 
                 : siteData.portfolio.filter(p => p.category === filter);
                 
             grid.innerHTML = items.map(item => `
-                <div class="portfolio-item hover-target">
+                <div class="portfolio-item hover-target ${item.category === 'Overlay' ? 'vertical-card' : ''}">
                     <img src="${item.image}" alt="${item.title}">
                     <div class="portfolio-info">
                         <h3 style="font-family:var(--font-display); font-size:1.8rem; letter-spacing:1px; text-transform:uppercase;">${item.title}</h3>
