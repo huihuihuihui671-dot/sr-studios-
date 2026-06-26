@@ -297,11 +297,10 @@
         </div>
         <div class="filters" id="portfolio-filters">
             <button class="filter-btn active hover-target" data-filter="all">All</button>
-            <button class="filter-btn hover-target" data-filter="Gaming">Gaming</button>
-            <button class="filter-btn hover-target" data-filter="BGMI">BGMI</button>
+            <button class="filter-btn hover-target" data-filter="GAMING">Gaming</button>
             <button class="filter-btn hover-target" data-filter="Tech">Tech</button>
-            <button class="filter-btn hover-target" data-filter="Documentary">Documentary</button>
-            <button class="filter-btn hover-target" data-filter="AI">AI</button>
+            <button class="filter-btn hover-target" data-filter="Overlay">Overlay</button>
+            <button class="filter-btn hover-target" data-filter="Stream Elements">Stream Elements</button>
         </div>
         <div class="portfolio-grid" id="portfolio-grid"></div>
     </section>
@@ -372,7 +371,6 @@
 
         async function loadData() {
             try {
-                // Fetch directly from our new MongoDB backend API
                 const res = await fetch('/api/data', { cache: 'no-store' });
                 if(res.ok) {
                     siteData = await res.json();
@@ -402,7 +400,6 @@
             document.getElementById('about-avatar').src = siteData.about.avatar || "https://placehold.co/400x500/617a44/fff?text=Avatar";
             document.getElementById('about-tools').innerHTML = siteData.about.tools.map(t => `<div class="role-pill hover-target">${t}</div>`).join('');
             
-            // PROCESS SECTION
             if(siteData.process_steps) {
                 const processGrid = document.getElementById('process-grid');
                 let processHTML = '';
@@ -430,7 +427,6 @@
                 processGrid.innerHTML = processHTML;
             }
 
-            // WHY CHOOSE ME SECTION
             if(siteData.why_choose_me) {
                 document.getElementById('features-grid').innerHTML = siteData.why_choose_me.map(f => {
                     const svgIcon = featureSvgMap[f.icon] || featureSvgMap["lightning"];
@@ -446,7 +442,6 @@
                 `}).join('');
             }
 
-            // Testimonials
             if(siteData.testimonials) {
                 document.getElementById('testi-grid').innerHTML = siteData.testimonials.map(t => `
                     <div class="testi-card hover-target">
@@ -471,7 +466,10 @@
 
         function renderPortfolio(filter) {
             const grid = document.getElementById('portfolio-grid');
-            const items = filter === 'all' ? siteData.portfolio : siteData.portfolio.filter(p => p.category === filter);
+            const items = filter === 'all' 
+                ? siteData.portfolio.slice(0, 8) 
+                : siteData.portfolio.filter(p => p.category === filter);
+                
             grid.innerHTML = items.map(item => `
                 <div class="portfolio-item hover-target">
                     <img src="${item.image}" alt="${item.title}">
@@ -503,7 +501,6 @@
             };
 
             try {
-                // Fetch the latest global data, append the task, and save it back to MongoDB
                 const res = await fetch('/api/data', { cache: 'no-store' });
                 let currentData = await res.json();
                 if(!currentData.tasks) currentData.tasks = [];
