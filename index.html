@@ -186,6 +186,65 @@
         .form-group textarea { min-height: 120px; resize: vertical; }
         .submit-btn { width: 100%; padding: 15px; background: var(--accent); color: #fff; border: 3px solid var(--text); border-radius: 12px; font-size: 1.2rem; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; cursor: none; box-shadow: 4px 4px 0 var(--text);}
         .submit-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--text); }
+        
+        /* 📱 MOBILE RESPONSIVENESS OVERHAUL */
+        @media(max-width: 900px) { 
+            /* 1. Fluid Typography Scaling */
+            h1 { font-size: clamp(2.5rem, 12vw, 4.5rem) !important; letter-spacing: -1px; } 
+            h2 { font-size: clamp(1.8rem, 8vw, 2.5rem) !important; }
+            .section-header { margin-bottom: 30px; }
+            
+            /* 2. Layout & Breathing Room */
+            section { padding: 60px 0; } /* Reduces huge gaps between sections */
+            
+            /* 3. Navigation Cleanup */
+            .nav-links { display: none; } 
+            nav { top: 10px; padding: 5px; }
+            .logo-box { padding: 10px 15px; }
+            .logo { font-size: 1.5rem; }
+            .btn-collab { padding: 0 15px; font-size: 0.9rem; }
+            
+            /* 4. Fix Horizontal Overflow (Forces 1 Column) */
+            .features-grid, 
+            .portfolio-grid, 
+            .testi-grid,
+            .about-grid { 
+                grid-template-columns: 1fr; 
+                gap: 20px;
+            }
+            
+            /* 5. Process Section Adjustments */
+            .process-divider { display: none !important; }
+            .process-card { padding: 5px; margin-bottom: 15px; }
+            
+            /* 6. Portfolio Filters Formatting */
+            .filters { gap: 8px; margin-bottom: 25px; }
+            .filter-btn { padding: 8px 16px; font-size: 0.85rem; border-width: 1px; }
+            
+            /* 7. Footer & Modal Fixes */
+            footer h2 { font-size: 2.5rem !important; } /* Overrides inline 4rem */
+            footer p { font-size: 1.1rem !important; }
+            .modal-content { padding: 30px 20px; width: 95%; margin-top: 20px; }
+            .modal-content h2 { font-size: 2rem !important; }
+            
+            /* 8. Clean up Doodles for smaller screens */
+            .float-anim-alt, .d-burst { opacity: 0.2; transform: scale(0.6); }
+            .doodle-highlight { width: 35px; height: 35px; right: -5px; bottom: 0; }
+            
+            /* 9. Disable custom cursor on touch devices */
+            #cursor-dot, #cursor-ring { display: none !important; } 
+            * { cursor: auto !important; } 
+        }
+
+        /* 📱 EXTRA SMALL SCREENS (iPhone SE, older Androids) */
+        @media(max-width: 400px) {
+            .floating-badge { font-size: 0.7rem; padding: 6px 12px; }
+            .badge-1 { left: -2%; top: 10%; }
+            .badge-2 { right: -2%; }
+            .testi-card { padding: 25px; }
+            .testi-card::before { font-size: 3rem; top: 5px; left: 10px; }
+            .hero { padding-top: 120px; }
+        }
 
         @media(max-width: 900px) { 
             h1 { font-size: 4rem; } 
