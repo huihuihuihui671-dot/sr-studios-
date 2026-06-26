@@ -101,6 +101,7 @@
                     <p id="stat-tasks" style="font-size: 2rem; font-weight:bold; color:var(--danger);">0</p>
                 </div>
             </div>
+            <button class="save-btn" onclick="saveData()">Save All Changes</button>
         </div>
 
         <div id="portfolio-manager" class="panel">
@@ -144,7 +145,7 @@
             <div class="form-group"><label>Hero Description</label><textarea id="hero-desc"></textarea></div>
             <div class="form-group"><label>About Bio</label><textarea id="about-bio"></textarea></div>
             <div class="form-group"><label>About Avatar Image URL</label><input type="text" id="about-avatar"></div>
-            <button class="save-btn" onclick="updateWebsiteContent()">Save Content</button>
+            <button class="save-btn" onclick="saveData()">Save Content</button>
         </div>
 
         <div id="sections" class="panel">
@@ -162,7 +163,7 @@
                 <label>Testimonials Array</label>
                 <textarea id="testimonials-json" style="font-family: monospace; min-height: 150px;"></textarea>
             </div>
-            <button class="save-btn" onclick="updateAdvancedSections()">Save Advanced Sections</button>
+            <button class="save-btn" onclick="saveData()">Save Advanced Sections</button>
         </div>
 
         <div id="social" class="panel">
@@ -171,7 +172,7 @@
             <div class="form-group"><label>Instagram URL</label><input type="text" id="social-instagram"></div>
             <div class="form-group"><label>YouTube URL</label><input type="text" id="social-youtube"></div>
             <div class="form-group"><label>Email</label><input type="text" id="social-email"></div>
-            <button class="save-btn" onclick="updateSocial()">Save Socials</button>
+            <button class="save-btn" onclick="saveData()">Save Socials</button>
         </div>
         
         <div id="theme" class="panel">
@@ -179,7 +180,7 @@
             <div class="form-group"><label>Background Color (Hex)</label><input type="text" id="theme-bg"></div>
             <div class="form-group"><label>Accent Color (Hex)</label><input type="text" id="theme-accent"></div>
             <div class="form-group"><label>Feature Card Bg (Hex)</label><input type="text" id="theme-feature"></div>
-            <button class="save-btn" onclick="updateTheme()">Save Theme</button>
+            <button class="save-btn" onclick="saveData()">Save Theme</button>
         </div>
 
     </div>
@@ -238,13 +239,51 @@
                 
                 populateForms();
                 renderTasks();
-                renderAdminPortfolio(); // Load visual portfolio
+                renderAdminPortfolio();
             } catch (error) {
                 alert("Could not connect to the database.");
             }
         }
 
+        // --- SUPER SYNC: Grabs everything from the screen before saving ---
+        function syncFormsToData() {
+            if(!adminData.hero) return;
+            
+            // Text Content
+            adminData.hero.title = document.getElementById('hero-title').value;
+            adminData.hero.description = document.getElementById('hero-desc').value;
+            adminData.about.bio = document.getElementById('about-bio').value;
+            adminData.about.avatar = document.getElementById('about-avatar').value;
+            
+            // Socials
+            adminData.social.discord = document.getElementById('social-discord').value;
+            adminData.social.instagram = document.getElementById('social-instagram').value;
+            adminData.social.youtube = document.getElementById('social-youtube').value;
+            adminData.social.email = document.getElementById('social-email').value;
+            
+            // Themes
+            adminData.theme.backgroundColor = document.getElementById('theme-bg').value;
+            adminData.theme.accentColor = document.getElementById('theme-accent').value;
+            adminData.theme.featureColor = document.getElementById('theme-feature').value;
+            
+            // Advanced JSONs (Wrapped in Try/Catch so it doesn't break if you make a typo)
+            try {
+                const processInput = document.getElementById('process-json').value;
+                if (processInput) adminData.process_steps = JSON.parse(processInput);
+                
+                const featuresInput = document.getElementById('features-json').value;
+                if (featuresInput) adminData.why_choose_me = JSON.parse(featuresInput);
+                
+                const testiInput = document.getElementById('testimonials-json').value;
+                if (testiInput) adminData.testimonials = JSON.parse(testiInput);
+            } catch (e) {
+                console.warn("Skipped saving JSON arrays due to formatting error.");
+            }
+        }
+
         async function saveData() {
+            syncFormsToData(); // Always pull latest screen data before saving
+            
             try {
                 const response = await fetch('/api/data', {
                     method: 'POST',
@@ -255,19 +294,19 @@
                 if(response.ok) {
                     showNotification();
                     document.getElementById('stat-proj').innerText = adminData.portfolio.length;
+                    // Update JSON box to reflect any new portfolio additions
+                    populateForms(); 
                 } else throw new Error("Failed to save");
             } catch (error) {
                 alert("Failed to save data globally!");
             }
         }
 
-        // --- NEW VISUAL PORTFOLIO CONTROLLERS (WITH EDIT & REORDER) --- //
-        
+        // --- PORTFOLIO MANAGER --- //
         function renderAdminPortfolio() {
             const grid = document.getElementById('admin-portfolio-grid');
             grid.innerHTML = '';
             
-            // Renders in exact array order. First item = top of website.
             adminData.portfolio.forEach((item, index) => {
                 grid.innerHTML += `
                     <div class="admin-card">
@@ -275,7 +314,7 @@
                         <div class="admin-card-info">
                             <div>
                                 <h4 style="margin-bottom:5px;">${item.title}</h4>
-                                <p style="font-size:0.8rem; color:var(--accent); font-weight:bold;">${item.category} ${item.ratio ? `(${item.ratio})` : ''}</p>
+                                <p style="font-size:0.8rem; color:var(--accent); font-weight:bold;">${item.category} ${item.ratio && item.ratio !== 'auto' ? `(${item.ratio})` : ''}</p>
                             </div>
                             
                             <div style="display:flex; gap:5px; margin-top:15px;">
@@ -284,8 +323,8 @@
                             </div>
                             
                             <div style="display:flex; gap:5px; margin-top:5px;">
-                                <button style="flex:1; background:#eab308; font-size:0.8rem; padding:8px;" onclick="openEditModal(${item.id})">✏️ Edit</button>
-                                <button class="delete-btn" style="flex:1; margin:0; padding:8px;" onclick="deletePortfolioCard(${item.id})">🗑️ Delete</button>
+                                <button style="flex:1; background:#eab308; font-size:0.8rem; padding:8px;" onclick="openEditModal('${item.id}')">✏️ Edit</button>
+                                <button class="delete-btn" style="flex:1; margin:0; padding:8px;" onclick="deletePortfolioCard('${item.id}')">🗑️ Delete</button>
                             </div>
                         </div>
                     </div>
@@ -297,27 +336,25 @@
             const newIndex = index + direction;
             if(newIndex < 0 || newIndex >= adminData.portfolio.length) return;
             
-            // Swap items in the array
             const temp = adminData.portfolio[index];
             adminData.portfolio[index] = adminData.portfolio[newIndex];
             adminData.portfolio[newIndex] = temp;
             
             renderAdminPortfolio();
-            saveData(); // Instantly save order to DB
+            saveData();
         }
 
         function openEditModal(id) {
-            const item = adminData.portfolio.find(i => i.id === id);
-            if(!item) return;
+            // Force strict string matching to prevent ID dropping
+            const item = adminData.portfolio.find(i => String(i.id) === String(id));
+            if(!item) return alert("Could not load item details.");
             
-            // Populate Modal
             document.getElementById('edit-id').value = item.id;
             document.getElementById('edit-title').value = item.title;
             document.getElementById('edit-category').value = item.category;
             document.getElementById('edit-url').value = item.image;
             document.getElementById('edit-ratio').value = item.ratio || 'auto';
             
-            // Show Modal
             document.getElementById('edit-portfolio-modal').classList.add('active');
         }
 
@@ -326,7 +363,7 @@
         }
 
         function savePortfolioEdit() {
-            const id = parseInt(document.getElementById('edit-id').value);
+            const id = document.getElementById('edit-id').value;
             const title = document.getElementById('edit-title').value.trim();
             const category = document.getElementById('edit-category').value.trim();
             const url = document.getElementById('edit-url').value.trim();
@@ -334,7 +371,7 @@
 
             if(!title || !category || !url) return alert("Please fill out all fields!");
 
-            const itemIndex = adminData.portfolio.findIndex(i => i.id === id);
+            const itemIndex = adminData.portfolio.findIndex(i => String(i.id) === String(id));
             if(itemIndex > -1) {
                 adminData.portfolio[itemIndex] = {
                     id: id,
@@ -359,44 +396,42 @@
             if(!title || !category || !url) return alert("Please fill out Title, Category, and URL!");
 
             const newId = adminData.portfolio.length > 0 
-                ? Math.max(...adminData.portfolio.map(i => i.id)) + 1 
+                ? Math.max(...adminData.portfolio.map(i => parseInt(i.id) || 0)) + 1 
                 : 1;
 
             const newItem = { id: newId, title: title, category: category, image: url };
             if(ratio !== 'auto') newItem.ratio = ratio;
 
-            // Adds new item to the top of the list (index 0)
-            adminData.portfolio.unshift(newItem);
+            adminData.portfolio.unshift(newItem); // Adds to top
             
-            // Clear inputs
             document.getElementById('new-title').value = '';
             document.getElementById('new-category').value = '';
             document.getElementById('new-url').value = '';
             document.getElementById('new-ratio').value = 'auto';
 
-            renderAdminPortfolio(); // Update UI
-            saveData(); // Instantly save to DB
+            renderAdminPortfolio();
+            saveData();
         }
 
         function deletePortfolioCard(id) {
             if(confirm("Are you sure you want to delete this thumbnail?")) {
-                adminData.portfolio = adminData.portfolio.filter(item => item.id !== id);
+                adminData.portfolio = adminData.portfolio.filter(item => String(item.id) !== String(id));
                 renderAdminPortfolio();
-                saveData(); // Instantly save to DB
+                saveData();
             }
         }
 
-        // --- REST OF ADMIN LOGIC --- //
-
+        // --- POPULATE OTHER FORMS --- //
         function populateForms() {
             if(!adminData.hero) return;
             document.getElementById('stat-proj').innerText = adminData.portfolio.length;
             
-            document.getElementById('hero-title').value = adminData.hero.title;
-            document.getElementById('hero-desc').value = adminData.hero.description;
-            document.getElementById('about-bio').value = adminData.about.bio;
+            document.getElementById('hero-title').value = adminData.hero.title || '';
+            document.getElementById('hero-desc').value = adminData.hero.description || '';
+            document.getElementById('about-bio').value = adminData.about.bio || '';
             document.getElementById('about-avatar').value = adminData.about.avatar || '';
             
+            // We still update these text areas just in case you want to use them
             document.getElementById('process-json').value = JSON.stringify(adminData.process_steps || [], null, 2);
             document.getElementById('features-json').value = JSON.stringify(adminData.why_choose_me || [], null, 2);
             document.getElementById('testimonials-json').value = JSON.stringify(adminData.testimonials || [], null, 2);
@@ -450,38 +485,6 @@
                 adminData.tasks = adminData.tasks.filter(t => t.id !== id);
                 saveData();
             }
-        }
-
-        function updateWebsiteContent() {
-            adminData.hero.title = document.getElementById('hero-title').value;
-            adminData.hero.description = document.getElementById('hero-desc').value;
-            adminData.about.bio = document.getElementById('about-bio').value;
-            adminData.about.avatar = document.getElementById('about-avatar').value;
-            saveData();
-        }
-
-        function updateAdvancedSections() {
-            try {
-                adminData.process_steps = JSON.parse(document.getElementById('process-json').value);
-                adminData.why_choose_me = JSON.parse(document.getElementById('features-json').value);
-                adminData.testimonials = JSON.parse(document.getElementById('testimonials-json').value);
-                saveData();
-            } catch (e) { alert("Invalid JSON format in Process or Features fields!"); }
-        }
-
-        function updateSocial() {
-            adminData.social.discord = document.getElementById('social-discord').value;
-            adminData.social.instagram = document.getElementById('social-instagram').value;
-            adminData.social.youtube = document.getElementById('social-youtube').value;
-            adminData.social.email = document.getElementById('social-email').value;
-            saveData();
-        }
-        
-        function updateTheme() {
-            adminData.theme.backgroundColor = document.getElementById('theme-bg').value;
-            adminData.theme.accentColor = document.getElementById('theme-accent').value;
-            adminData.theme.featureColor = document.getElementById('theme-feature').value;
-            saveData();
         }
 
         function switchTab(tabId) {
