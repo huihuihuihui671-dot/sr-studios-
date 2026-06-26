@@ -15,6 +15,7 @@
         input[type="password"], input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px; }
         button { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: opacity 0.2s; }
         button:hover { opacity: 0.8; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .sidebar { width: 250px; background: var(--sidebar); border-right: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; }
         .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.2rem; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
@@ -33,19 +34,25 @@
         select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
         
         .save-btn { width: auto; display: inline-block; margin-top: 20px; background: var(--accent); }
-        .delete-btn { background: var(--danger); width: auto; padding: 8px 12px; font-size: 0.8rem; }
+        .delete-btn { background: var(--danger); }
         
         .notification { position: fixed; top: 20px; right: 20px; background: var(--accent); color: #fff; padding: 15px 25px; border-radius: 6px; transform: translateX(150%); transition: transform 0.3s; z-index: 9999; }
         .notification.show { transform: translateX(0); }
 
+        /* Admin Modal UI */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); z-index: 10001; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: #fff; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; transform: translateY(20px); transition: transform 0.3s; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+
         /* VISUAL PORTFOLIO UI */
         .add-card-box { background: #fafafa; padding: 20px; border-radius: 8px; border: 1px dashed #ccc; margin-bottom: 30px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .admin-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
-        .admin-card img { width: 100%; height: 140px; object-fit: cover; background: #eee; }
+        .admin-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .admin-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .admin-card img { width: 100%; height: 140px; object-fit: cover; background: #eee; border-bottom: 1px solid var(--border); }
         .admin-card-info { padding: 15px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         
-        /* Task Cards */
         .task-card { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; background: #fafafa; overflow: hidden; }
         .task-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #fff; }
         .task-header:hover { background: #f4f4f5; }
@@ -122,7 +129,7 @@
                 <button onclick="addPortfolioCard()" style="background:var(--primary);">+ Upload Card to Portfolio</button>
             </div>
 
-            <h3 style="margin-bottom: 15px;">Current Portfolio Cards</h3>
+            <h3 style="margin-bottom: 15px;">Current Portfolio Cards (Order dictates display on website)</h3>
             <div class="admin-grid" id="admin-portfolio-grid"></div>
         </div>
 
@@ -143,7 +150,6 @@
         <div id="sections" class="panel">
             <h2>Advanced Sections (JSON)</h2>
             <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Portfolio has been moved to its own visual tab. Manage Process and Features here.</p>
-            
             <div class="form-group">
                 <label>Process Steps Array (OUR PROCESS)</label>
                 <textarea id="process-json" style="font-family: monospace; min-height: 150px;"></textarea>
@@ -176,6 +182,39 @@
             <button class="save-btn" onclick="updateTheme()">Save Theme</button>
         </div>
 
+    </div>
+
+    <div class="modal-overlay" id="edit-portfolio-modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Edit Portfolio Item</h2>
+            <input type="hidden" id="edit-id">
+            
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="edit-title">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" id="edit-category">
+            </div>
+            <div class="form-group">
+                <label>Image URL</label>
+                <input type="text" id="edit-url">
+            </div>
+            <div class="form-group">
+                <label>Ratio</label>
+                <select id="edit-ratio">
+                    <option value="auto">Default Auto</option>
+                    <option value="16:9">16:9 (Horizontal)</option>
+                    <option value="9:16">9:16 (Vertical)</option>
+                </select>
+            </div>
+            
+            <div style="display:flex; gap:10px; margin-top: 25px;">
+                <button onclick="savePortfolioEdit()" style="flex:1; background:var(--accent);">Save Changes</button>
+                <button onclick="closeEditModal()" style="flex:1; background:#9ca3af;">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -222,14 +261,14 @@
             }
         }
 
-        // --- NEW VISUAL PORTFOLIO CONTROLLERS --- //
+        // --- NEW VISUAL PORTFOLIO CONTROLLERS (WITH EDIT & REORDER) --- //
         
         function renderAdminPortfolio() {
             const grid = document.getElementById('admin-portfolio-grid');
             grid.innerHTML = '';
             
-            // Render items in reverse so newest is on top
-            [...adminData.portfolio].reverse().forEach(item => {
+            // Renders in exact array order. First item = top of website.
+            adminData.portfolio.forEach((item, index) => {
                 grid.innerHTML += `
                     <div class="admin-card">
                         <img src="${item.image}" alt="${item.title}">
@@ -238,11 +277,77 @@
                                 <h4 style="margin-bottom:5px;">${item.title}</h4>
                                 <p style="font-size:0.8rem; color:var(--accent); font-weight:bold;">${item.category} ${item.ratio ? `(${item.ratio})` : ''}</p>
                             </div>
-                            <button class="delete-btn" style="margin-top:15px;" onclick="deletePortfolioCard(${item.id})">🗑️ Delete Card</button>
+                            
+                            <div style="display:flex; gap:5px; margin-top:15px;">
+                                <button style="flex:1; font-size:0.8rem; padding:8px; background:#4b5563;" onclick="movePortfolioCard(${index}, -1)" ${index === 0 ? 'disabled' : ''}>⬅️ Move Left</button>
+                                <button style="flex:1; font-size:0.8rem; padding:8px; background:#4b5563;" onclick="movePortfolioCard(${index}, 1)" ${index === adminData.portfolio.length - 1 ? 'disabled' : ''}>Move Right ➡️</button>
+                            </div>
+                            
+                            <div style="display:flex; gap:5px; margin-top:5px;">
+                                <button style="flex:1; background:#eab308; font-size:0.8rem; padding:8px;" onclick="openEditModal(${item.id})">✏️ Edit</button>
+                                <button class="delete-btn" style="flex:1; margin:0; padding:8px;" onclick="deletePortfolioCard(${item.id})">🗑️ Delete</button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function movePortfolioCard(index, direction) {
+            const newIndex = index + direction;
+            if(newIndex < 0 || newIndex >= adminData.portfolio.length) return;
+            
+            // Swap items in the array
+            const temp = adminData.portfolio[index];
+            adminData.portfolio[index] = adminData.portfolio[newIndex];
+            adminData.portfolio[newIndex] = temp;
+            
+            renderAdminPortfolio();
+            saveData(); // Instantly save order to DB
+        }
+
+        function openEditModal(id) {
+            const item = adminData.portfolio.find(i => i.id === id);
+            if(!item) return;
+            
+            // Populate Modal
+            document.getElementById('edit-id').value = item.id;
+            document.getElementById('edit-title').value = item.title;
+            document.getElementById('edit-category').value = item.category;
+            document.getElementById('edit-url').value = item.image;
+            document.getElementById('edit-ratio').value = item.ratio || 'auto';
+            
+            // Show Modal
+            document.getElementById('edit-portfolio-modal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-portfolio-modal').classList.remove('active');
+        }
+
+        function savePortfolioEdit() {
+            const id = parseInt(document.getElementById('edit-id').value);
+            const title = document.getElementById('edit-title').value.trim();
+            const category = document.getElementById('edit-category').value.trim();
+            const url = document.getElementById('edit-url').value.trim();
+            const ratio = document.getElementById('edit-ratio').value;
+
+            if(!title || !category || !url) return alert("Please fill out all fields!");
+
+            const itemIndex = adminData.portfolio.findIndex(i => i.id === id);
+            if(itemIndex > -1) {
+                adminData.portfolio[itemIndex] = {
+                    id: id,
+                    title: title,
+                    category: category,
+                    image: url
+                };
+                if(ratio !== 'auto') adminData.portfolio[itemIndex].ratio = ratio;
+            }
+
+            closeEditModal();
+            renderAdminPortfolio();
+            saveData();
         }
 
         function addPortfolioCard() {
@@ -260,7 +365,8 @@
             const newItem = { id: newId, title: title, category: category, image: url };
             if(ratio !== 'auto') newItem.ratio = ratio;
 
-            adminData.portfolio.push(newItem);
+            // Adds new item to the top of the list (index 0)
+            adminData.portfolio.unshift(newItem);
             
             // Clear inputs
             document.getElementById('new-title').value = '';
