@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SR STUDIOS | Admin Dashboard</title>
     <style>
-        :root { --bg: #f4f4f5; --text: #18181b; --primary: #000; --sidebar: #ffffff; --border: #e4e4e7; --accent: #617a44; }
+        :root { --bg: #f4f4f5; --text: #18181b; --primary: #000; --sidebar: #ffffff; --border: #e4e4e7; --accent: #617a44; --danger: #ef4444; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
         
@@ -20,7 +20,7 @@
         .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.2rem; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
         .nav-item { padding: 12px 20px; cursor: pointer; transition: background 0.2s; display: flex; justify-content: space-between; align-items: center; }
         .nav-item:hover, .nav-item.active { background: var(--bg); font-weight: 600; border-right: 3px solid var(--primary); }
-        .badge { background: #ef4444; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 50px; }
+        .badge { background: var(--danger); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 50px; }
         
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .panel { display: none; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
@@ -30,18 +30,28 @@
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
         textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; min-height: 100px; resize: vertical; }
+        select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
         
+        .save-btn { width: auto; display: inline-block; margin-top: 20px; background: var(--accent); }
+        .delete-btn { background: var(--danger); width: auto; padding: 8px 12px; font-size: 0.8rem; }
+        
+        .notification { position: fixed; top: 20px; right: 20px; background: var(--accent); color: #fff; padding: 15px 25px; border-radius: 6px; transform: translateX(150%); transition: transform 0.3s; z-index: 9999; }
+        .notification.show { transform: translateX(0); }
+
+        /* VISUAL PORTFOLIO UI */
+        .add-card-box { background: #fafafa; padding: 20px; border-radius: 8px; border: 1px dashed #ccc; margin-bottom: 30px; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .admin-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+        .admin-card img { width: 100%; height: 140px; object-fit: cover; background: #eee; }
+        .admin-card-info { padding: 15px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        /* Task Cards */
         .task-card { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; background: #fafafa; overflow: hidden; }
         .task-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #fff; }
         .task-header:hover { background: #f4f4f5; }
         .task-body { padding: 20px; border-top: 1px solid var(--border); display: none; background: #fafafa; }
         .task-body.open { display: block; }
         .task-body p { margin-bottom: 10px; font-size: 0.95rem; line-height: 1.5; }
-        .btn-done { width: auto; background: var(--accent); margin-top: 10px; }
-        
-        .save-btn { width: auto; display: inline-block; margin-top: 20px; background: var(--accent); }
-        .notification { position: fixed; top: 20px; right: 20px; background: var(--accent); color: #fff; padding: 15px 25px; border-radius: 6px; transform: translateX(150%); transition: transform 0.3s; z-index: 9999; }
-        .notification.show { transform: translateX(0); }
     </style>
 </head>
 <body>
@@ -55,18 +65,19 @@
         </div>
     </div>
 
-    <div id="notification" class="notification">Changes Saved to MongoDB!</div>
+    <div id="notification" class="notification">Changes Saved to Database!</div>
 
     <div class="sidebar">
         <div class="brand">SR STUDIOS<br><span style="font-size:0.8rem;font-weight:normal;color:#666;">Control Panel</span></div>
         <div class="nav-item active" onclick="switchTab('dashboard')">Dashboard</div>
         <div class="nav-item" onclick="switchTab('tasks')">
-            Tasks / Inquiries <span id="task-badge" class="badge" style="display:none;">0</span>
+            Inquiries <span id="task-badge" class="badge" style="display:none;">0</span>
         </div>
-        <div class="nav-item" onclick="switchTab('content')">Content Manager</div>
-        <div class="nav-item" onclick="switchTab('sections')">Section JSONs</div>
+        <div class="nav-item" style="color:var(--accent); font-weight:bold;" onclick="switchTab('portfolio-manager')">📸 Portfolio Manager</div>
+        <div class="nav-item" onclick="switchTab('content')">Text Content</div>
+        <div class="nav-item" onclick="switchTab('sections')">Advanced JSONs</div>
         <div class="nav-item" onclick="switchTab('social')">Social Manager</div>
-        <div class="nav-item" onclick="switchTab('theme')">Theme & Settings</div>
+        <div class="nav-item" onclick="switchTab('theme')">Theme Settings</div>
     </div>
 
     <div class="main-content">
@@ -74,25 +85,54 @@
         <div id="dashboard" class="panel active">
             <h2>Overview Statistics</h2>
             <div style="display:flex; gap:20px; margin-top:20px;">
-                <div style="flex:1; border: 1px solid var(--border); padding: 20px; border-radius: 8px;">
+                <div style="flex:1; border: 1px solid var(--border); padding: 20px; border-radius: 8px; cursor: pointer;" onclick="switchTab('portfolio-manager')">
                     <h3>Total Projects</h3>
-                    <p id="stat-proj" style="font-size: 2rem; font-weight:bold;">0</p>
+                    <p id="stat-proj" style="font-size: 2rem; font-weight:bold; color:var(--accent);">0</p>
                 </div>
                 <div style="flex:1; border: 1px solid var(--border); padding: 20px; border-radius: 8px; cursor: pointer;" onclick="switchTab('tasks')">
                     <h3>Pending Inquiries</h3>
-                    <p id="stat-tasks" style="font-size: 2rem; font-weight:bold; color:#ef4444;">0</p>
+                    <p id="stat-tasks" style="font-size: 2rem; font-weight:bold; color:var(--danger);">0</p>
                 </div>
             </div>
         </div>
 
+        <div id="portfolio-manager" class="panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border); margin-bottom:25px; padding-bottom:15px;">
+                <h2 style="margin:0; border:none; padding:0;">Visual Portfolio Manager</h2>
+                <button class="save-btn" style="margin:0;" onclick="saveData()">Save All Changes</button>
+            </div>
+            
+            <div class="add-card-box">
+                <h3 style="margin-bottom: 15px;">➕ Add New Card</h3>
+                <div style="display:flex; gap:15px; margin-bottom:10px;">
+                    <div style="flex:1;"><label>Title</label><input type="text" id="new-title" placeholder="e.g. GODDESS IS LIVE"></div>
+                    <div style="flex:1;"><label>Category</label><input type="text" id="new-category" placeholder="e.g. GAMING, Overlay, Stream Elements"></div>
+                </div>
+                <div style="display:flex; gap:15px; margin-bottom:10px;">
+                    <div style="flex:2;"><label>Cloudinary Image URL</label><input type="text" id="new-url" placeholder="https://res.cloudinary.com/..."></div>
+                    <div style="flex:1;">
+                        <label>Thumbnail Ratio</label>
+                        <select id="new-ratio">
+                            <option value="auto">Default Auto</option>
+                            <option value="16:9">16:9 (Horizontal / Video)</option>
+                            <option value="9:16">9:16 (Vertical Overlay)</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="addPortfolioCard()" style="background:var(--primary);">+ Upload Card to Portfolio</button>
+            </div>
+
+            <h3 style="margin-bottom: 15px;">Current Portfolio Cards</h3>
+            <div class="admin-grid" id="admin-portfolio-grid"></div>
+        </div>
+
         <div id="tasks" class="panel">
-            <h2>Client Inquiries & Pending Tasks</h2>
-            <p style="margin-bottom: 20px; color: #666;">Review project details submitted via the website form.</p>
+            <h2>Client Inquiries</h2>
             <div id="tasks-list"></div>
         </div>
 
         <div id="content" class="panel">
-            <h2>Website Content</h2>
+            <h2>Website Text Content</h2>
             <div class="form-group"><label>Hero Title</label><input type="text" id="hero-title"></div>
             <div class="form-group"><label>Hero Description</label><textarea id="hero-desc"></textarea></div>
             <div class="form-group"><label>About Bio</label><textarea id="about-bio"></textarea></div>
@@ -101,13 +141,9 @@
         </div>
 
         <div id="sections" class="panel">
-            <h2>Sections Management (JSON)</h2>
-            <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Advanced editor for dynamic arrays. Follow existing JSON structure carefully.</p>
+            <h2>Advanced Sections (JSON)</h2>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Portfolio has been moved to its own visual tab. Manage Process and Features here.</p>
             
-            <div class="form-group">
-                <label>Portfolio Array</label>
-                <textarea id="portfolio-json" style="font-family: monospace; min-height: 150px;"></textarea>
-            </div>
             <div class="form-group">
                 <label>Process Steps Array (OUR PROCESS)</label>
                 <textarea id="process-json" style="font-family: monospace; min-height: 150px;"></textarea>
@@ -120,7 +156,7 @@
                 <label>Testimonials Array</label>
                 <textarea id="testimonials-json" style="font-family: monospace; min-height: 150px;"></textarea>
             </div>
-            <button class="save-btn" onclick="updateSections()">Save All Sections</button>
+            <button class="save-btn" onclick="updateAdvancedSections()">Save Advanced Sections</button>
         </div>
 
         <div id="social" class="panel">
@@ -154,18 +190,18 @@
 
         async function loadData() {
             try {
-                // Force fresh data load
                 const response = await fetch('/api/data', { cache: 'no-store' });
                 if (!response.ok) throw new Error("Server error");
                 
                 adminData = await response.json();
                 if(!adminData.tasks) adminData.tasks = [];
+                if(!adminData.portfolio) adminData.portfolio = [];
                 
                 populateForms();
                 renderTasks();
+                renderAdminPortfolio(); // Load visual portfolio
             } catch (error) {
-                alert("Could not connect to the database. Make sure the server is running.");
-                console.error(error);
+                alert("Could not connect to the database.");
             }
         }
 
@@ -179,26 +215,82 @@
                 
                 if(response.ok) {
                     showNotification();
-                    renderTasks();
-                } else {
-                    throw new Error("Failed to save");
-                }
+                    document.getElementById('stat-proj').innerText = adminData.portfolio.length;
+                } else throw new Error("Failed to save");
             } catch (error) {
                 alert("Failed to save data globally!");
-                console.error(error);
             }
         }
 
+        // --- NEW VISUAL PORTFOLIO CONTROLLERS --- //
+        
+        function renderAdminPortfolio() {
+            const grid = document.getElementById('admin-portfolio-grid');
+            grid.innerHTML = '';
+            
+            // Render items in reverse so newest is on top
+            [...adminData.portfolio].reverse().forEach(item => {
+                grid.innerHTML += `
+                    <div class="admin-card">
+                        <img src="${item.image}" alt="${item.title}">
+                        <div class="admin-card-info">
+                            <div>
+                                <h4 style="margin-bottom:5px;">${item.title}</h4>
+                                <p style="font-size:0.8rem; color:var(--accent); font-weight:bold;">${item.category} ${item.ratio ? `(${item.ratio})` : ''}</p>
+                            </div>
+                            <button class="delete-btn" style="margin-top:15px;" onclick="deletePortfolioCard(${item.id})">🗑️ Delete Card</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function addPortfolioCard() {
+            const title = document.getElementById('new-title').value.trim();
+            const category = document.getElementById('new-category').value.trim();
+            const url = document.getElementById('new-url').value.trim();
+            const ratio = document.getElementById('new-ratio').value;
+
+            if(!title || !category || !url) return alert("Please fill out Title, Category, and URL!");
+
+            const newId = adminData.portfolio.length > 0 
+                ? Math.max(...adminData.portfolio.map(i => i.id)) + 1 
+                : 1;
+
+            const newItem = { id: newId, title: title, category: category, image: url };
+            if(ratio !== 'auto') newItem.ratio = ratio;
+
+            adminData.portfolio.push(newItem);
+            
+            // Clear inputs
+            document.getElementById('new-title').value = '';
+            document.getElementById('new-category').value = '';
+            document.getElementById('new-url').value = '';
+            document.getElementById('new-ratio').value = 'auto';
+
+            renderAdminPortfolio(); // Update UI
+            saveData(); // Instantly save to DB
+        }
+
+        function deletePortfolioCard(id) {
+            if(confirm("Are you sure you want to delete this thumbnail?")) {
+                adminData.portfolio = adminData.portfolio.filter(item => item.id !== id);
+                renderAdminPortfolio();
+                saveData(); // Instantly save to DB
+            }
+        }
+
+        // --- REST OF ADMIN LOGIC --- //
+
         function populateForms() {
             if(!adminData.hero) return;
-            document.getElementById('stat-proj').innerText = adminData.portfolio ? adminData.portfolio.length : 0;
+            document.getElementById('stat-proj').innerText = adminData.portfolio.length;
             
             document.getElementById('hero-title').value = adminData.hero.title;
             document.getElementById('hero-desc').value = adminData.hero.description;
             document.getElementById('about-bio').value = adminData.about.bio;
             document.getElementById('about-avatar').value = adminData.about.avatar || '';
             
-            document.getElementById('portfolio-json').value = JSON.stringify(adminData.portfolio || [], null, 2);
             document.getElementById('process-json').value = JSON.stringify(adminData.process_steps || [], null, 2);
             document.getElementById('features-json').value = JSON.stringify(adminData.why_choose_me || [], null, 2);
             document.getElementById('testimonials-json').value = JSON.stringify(adminData.testimonials || [], null, 2);
@@ -262,16 +354,13 @@
             saveData();
         }
 
-        function updateSections() {
+        function updateAdvancedSections() {
             try {
-                adminData.portfolio = JSON.parse(document.getElementById('portfolio-json').value);
                 adminData.process_steps = JSON.parse(document.getElementById('process-json').value);
                 adminData.why_choose_me = JSON.parse(document.getElementById('features-json').value);
                 adminData.testimonials = JSON.parse(document.getElementById('testimonials-json').value);
-                
-                document.getElementById('stat-proj').innerText = adminData.portfolio.length;
                 saveData();
-            } catch (e) { alert("Invalid JSON format in one of the fields!"); }
+            } catch (e) { alert("Invalid JSON format in Process or Features fields!"); }
         }
 
         function updateSocial() {
