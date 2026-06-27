@@ -323,7 +323,6 @@
         </div>
         <div class="testi-grid" id="testi-grid"></div>
         
-        <!-- NEW LEAVE A REVIEW BUTTON -->
         <div style="text-align: center; margin-top: 50px;">
             <button class="filter-btn hover-target" onclick="openReviewModal()">+ Leave a Review</button>
         </div>
@@ -343,7 +342,6 @@
         </div>
     </footer>
 
-    <!-- EXISTING COLLAB MODAL -->
     <div class="modal-overlay" id="collab-modal">
         <div class="modal-content">
             <button class="close-btn hover-target" onclick="closeModal()">&times;</button>
@@ -366,7 +364,6 @@
         </div>
     </div>
 
-    <!-- NEW SECURE REVIEW MODAL -->
     <div class="modal-overlay" id="review-modal">
         <div class="modal-content">
             <button class="close-btn hover-target" onclick="closeReviewModal()">&times;</button>
@@ -633,4 +630,21 @@
         
         function animateCursor() { 
             ringX += (mouseX - ringX) * 0.15; 
-            ringY += (mouseY - ringY) * 0.Normally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+            ringY += (mouseY - ringY) * 0.15; 
+            cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`; 
+            requestAnimationFrame(animateCursor); 
+        }
+        animateCursor();
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                renderPortfolio(e.target.dataset.filter);
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
