@@ -98,8 +98,8 @@
         .process-card { flex: 1; text-align: center; position: relative; padding: 15px; border-radius: 20px; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .process-card:hover { transform: translateY(-8px); }
         
-        .process-img-wrapper { overflow: hidden; border-radius: 15px; margin-bottom: 20px; border: 3px solid var(--text); position: relative; background: #fff; box-shadow: 4px 4px 0 var(--text); }
-        .process-img-wrapper img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .process-img-wrapper { width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 15px; margin-bottom: 20px; border: 3px solid var(--text); position: relative; background: #fff; box-shadow: 4px 4px 0 var(--text); }
+        .process-img-wrapper img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .process-card:hover .process-img-wrapper img { transform: scale(1.08); }
         
         .process-card h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 5px; letter-spacing: 1px; }
