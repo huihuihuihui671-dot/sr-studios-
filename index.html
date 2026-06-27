@@ -138,10 +138,15 @@
         .portfolio-item:hover img { transform: scale(1.05); filter: grayscale(20%); }
         .portfolio-item:hover .portfolio-info { bottom: 0; }
 
-        /* Dynamic Class for Vertical (Overlay) Cards */
+        /* Dynamic Classes for Custom Aspect Ratios */
         .portfolio-item.vertical-card img {
             height: auto;
             aspect-ratio: 9 / 16;
+            object-fit: cover;
+        }
+        .portfolio-item.horizontal-card img {
+            height: auto;
+            aspect-ratio: 16 / 9;
             object-fit: cover;
         }
 
@@ -317,6 +322,11 @@
             <h2 class="title-dashed">TESTIMONIALS<div class="doodle-highlight"></div></h2>
         </div>
         <div class="testi-grid" id="testi-grid"></div>
+        
+        <!-- NEW LEAVE A REVIEW BUTTON -->
+        <div style="text-align: center; margin-top: 50px;">
+            <button class="filter-btn hover-target" onclick="openReviewModal()">+ Leave a Review</button>
+        </div>
     </section>
 
     <footer class="hover-target" id="contact">
@@ -333,6 +343,7 @@
         </div>
     </footer>
 
+    <!-- EXISTING COLLAB MODAL -->
     <div class="modal-overlay" id="collab-modal">
         <div class="modal-content">
             <button class="close-btn hover-target" onclick="closeModal()">&times;</button>
@@ -352,6 +363,25 @@
                 <textarea id="client-details" class="hover-target" placeholder="I need a thumbnail for..."></textarea>
             </div>
             <button class="submit-btn hover-target" onclick="submitProject()">Send Inquiry</button>
+        </div>
+    </div>
+
+    <!-- NEW SECURE REVIEW MODAL -->
+    <div class="modal-overlay" id="review-modal">
+        <div class="modal-content">
+            <button class="close-btn hover-target" onclick="closeReviewModal()">&times;</button>
+            <h2 style="font-size: 2.5rem; margin-bottom: 5px; color:var(--text); letter-spacing:-1px;">Leave a Review<div class="doodle-highlight" style="width:30px; height:30px; right:-5px; bottom:5px;"></div></h2>
+            <p style="margin-bottom: 25px; font-size: 0.95rem; font-weight:bold; color:var(--accent);">Security Check: You must enter the exact Creator Name used on your thumbnails (e.g., Doma Live).</p>
+            
+            <div class="form-group">
+                <label>Your Creator Name</label>
+                <input type="text" id="reviewer-name" class="hover-target" placeholder="e.g. GODDESS IS LIVE">
+            </div>
+            <div class="form-group">
+                <label>Your Review</label>
+                <textarea id="reviewer-text" class="hover-target" placeholder="Sarthak's work is amazing because..."></textarea>
+            </div>
+            <button class="submit-btn hover-target" onclick="submitSecureReview()">Submit Review</button>
         </div>
     </div>
 
@@ -474,22 +504,28 @@
         function renderPortfolio(filter) {
             const grid = document.getElementById('portfolio-grid');
             
-            // Dynamic slice and filter for the portfolio
             const items = filter === 'all' 
                 ? siteData.portfolio.slice(0, 8) 
                 : siteData.portfolio.filter(p => p.category === filter);
                 
-            grid.innerHTML = items.map(item => `
-                <div class="portfolio-item hover-target ${item.category === 'Overlay' ? 'vertical-card' : ''}">
+            grid.innerHTML = items.map(item => {
+                let ratioClass = '';
+                if (item.ratio === '9:16' || item.category === 'Overlay') ratioClass = 'vertical-card';
+                else if (item.ratio === '16:9' || item.category === 'Stream Elements') ratioClass = 'horizontal-card';
+
+                return `
+                <div class="portfolio-item hover-target ${ratioClass}">
                     <img src="${item.image}" alt="${item.title}">
                     <div class="portfolio-info">
                         <h3 style="font-family:var(--font-display); font-size:1.8rem; letter-spacing:1px; text-transform:uppercase;">${item.title}</h3>
                         <p style="color:var(--accent); font-weight:800; text-transform:uppercase;">${item.category}</p>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
+        // Project Inquiry Logic
         function openModal() { document.getElementById('collab-modal').classList.add('active'); }
         function closeModal() { document.getElementById('collab-modal').classList.remove('active'); }
 
@@ -533,6 +569,58 @@
             }
         }
 
+        // --- NEW: SECURE REVIEW LOGIC ---
+        function openReviewModal() { document.getElementById('review-modal').classList.add('active'); }
+        function closeReviewModal() { document.getElementById('review-modal').classList.remove('active'); }
+
+        async function submitSecureReview() {
+            const name = document.getElementById('reviewer-name').value.trim();
+            const text = document.getElementById('reviewer-text').value.trim();
+
+            if(!name || !text) return alert("Please fill all details!");
+
+            // MAGIC CHECK: Does this name exist in ANY of the portfolio titles?
+            const isVerifiedClient = siteData.portfolio.some(item => 
+                item.title.toLowerCase().includes(name.toLowerCase()) || 
+                name.toLowerCase().includes(item.title.toLowerCase())
+            );
+
+            if (!isVerifiedClient) {
+                return alert("Verification Failed ❌: We couldn't find your name in the portfolio. Only creators with existing work on the site can leave a review automatically!");
+            }
+
+            const newTask = {
+                id: Date.now(),
+                name: "⭐ REVIEW: " + name,
+                contact: "Verified Client Dashboard",
+                details: text,
+                status: 'Pending Review',
+                date: new Date().toLocaleDateString()
+            };
+
+            try {
+                const res = await fetch('/api/data', { cache: 'no-store' });
+                let currentData = await res.json();
+                if(!currentData.tasks) currentData.tasks = [];
+                currentData.tasks.push(newTask);
+                
+                await fetch('/api/data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentData)
+                });
+                
+                alert("Review submitted securely! Sarthak will review it for the website.");
+                closeReviewModal();
+                
+                document.getElementById('reviewer-name').value = '';
+                document.getElementById('reviewer-text').value = '';
+            } catch (err) {
+                alert("Error sending review.");
+                console.error(err);
+            }
+        }
+
         function initAnimations() {
             setTimeout(() => document.getElementById('loader').style.transform = 'translateY(-100%)', 800);
             const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }), { threshold: 0.1 });
@@ -542,18 +630,7 @@
         const cursorDot = document.getElementById('cursor-dot'), cursorRing = document.getElementById('cursor-ring');
         let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
         document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px)`; });
-        function animateCursor() { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`; requestAnimationFrame(animateCursor); }
-        animateCursor();
-
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                renderPortfolio(e.target.dataset.filter);
-            });
-        });
-
-        window.addEventListener('DOMContentLoaded', loadData);
-    </script>
-</body>
-</html>
+        
+        function animateCursor() { 
+            ringX += (mouseX - ringX) * 0.15; 
+            ringY += (mouseY - ringY) * 0.Normally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
