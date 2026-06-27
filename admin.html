@@ -81,6 +81,7 @@
             Inquiries <span id="task-badge" class="badge" style="display:none;">0</span>
         </div>
         <div class="nav-item" style="color:var(--accent); font-weight:bold;" onclick="switchTab('portfolio-manager')">📸 Portfolio Manager</div>
+        <div class="nav-item" style="color:#eab308; font-weight:bold;" onclick="switchTab('review-manager')">⭐ Review Manager</div>
         <div class="nav-item" onclick="switchTab('content')">Text Content</div>
         <div class="nav-item" onclick="switchTab('sections')">Advanced JSONs</div>
         <div class="nav-item" onclick="switchTab('social')">Social Manager</div>
@@ -134,8 +135,32 @@
             <div class="admin-grid" id="admin-portfolio-grid"></div>
         </div>
 
+        <div id="review-manager" class="panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border); margin-bottom:25px; padding-bottom:15px;">
+                <h2 style="margin:0; border:none; padding:0;">Review & Testimonial Manager</h2>
+                <button class="save-btn" style="margin:0;" onclick="saveData()">Save All Changes</button>
+            </div>
+            
+            <div class="add-card-box">
+                <h3 style="margin-bottom: 15px;">➕ Publish Approved Review</h3>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Copy a submitted review from your Inquiries tab and paste it here to push it live to the website.</p>
+                <div class="form-group">
+                    <label>Reviewer Name</label>
+                    <input type="text" id="new-review-name" placeholder="e.g. GODDESS IS LIVE">
+                </div>
+                <div class="form-group">
+                    <label>Review Text</label>
+                    <textarea id="new-review-text" style="min-height:80px;" placeholder="Paste the exact review text here..."></textarea>
+                </div>
+                <button onclick="addReview()" style="background:var(--primary); color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer;">+ Publish Review to Website</button>
+            </div>
+
+            <h3 style="margin-bottom: 15px;">Currently Live Reviews</h3>
+            <div id="admin-reviews-list"></div>
+        </div>
+
         <div id="tasks" class="panel">
-            <h2>Client Inquiries</h2>
+            <h2>Client Inquiries & Pending Reviews</h2>
             <div id="tasks-list"></div>
         </div>
 
@@ -150,7 +175,7 @@
 
         <div id="sections" class="panel">
             <h2>Advanced Sections (JSON)</h2>
-            <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Portfolio has been moved to its own visual tab. Manage Process and Features here.</p>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Portfolio and Reviews have been moved to visual tabs. Manage Process and Features here.</p>
             <div class="form-group">
                 <label>Process Steps Array (OUR PROCESS)</label>
                 <textarea id="process-json" style="font-family: monospace; min-height: 150px;"></textarea>
@@ -158,10 +183,6 @@
             <div class="form-group">
                 <label>Features Array (WHY CHOOSE ME)</label>
                 <textarea id="features-json" style="font-family: monospace; min-height: 150px;"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Testimonials Array</label>
-                <textarea id="testimonials-json" style="font-family: monospace; min-height: 150px;"></textarea>
             </div>
             <button class="save-btn" onclick="saveData()">Save Advanced Sections</button>
         </div>
@@ -236,53 +257,48 @@
                 adminData = await response.json();
                 if(!adminData.tasks) adminData.tasks = [];
                 if(!adminData.portfolio) adminData.portfolio = [];
+                if(!adminData.testimonials) adminData.testimonials = [];
                 
                 populateForms();
                 renderTasks();
                 renderAdminPortfolio();
+                renderAdminReviews();
             } catch (error) {
                 alert("Could not connect to the database.");
             }
         }
 
-        // --- SUPER SYNC: Grabs everything from the screen before saving ---
+        // --- SUPER SYNC ---
         function syncFormsToData() {
             if(!adminData.hero) return;
             
-            // Text Content
             adminData.hero.title = document.getElementById('hero-title').value;
             adminData.hero.description = document.getElementById('hero-desc').value;
             adminData.about.bio = document.getElementById('about-bio').value;
             adminData.about.avatar = document.getElementById('about-avatar').value;
             
-            // Socials
             adminData.social.discord = document.getElementById('social-discord').value;
             adminData.social.instagram = document.getElementById('social-instagram').value;
             adminData.social.youtube = document.getElementById('social-youtube').value;
             adminData.social.email = document.getElementById('social-email').value;
             
-            // Themes
             adminData.theme.backgroundColor = document.getElementById('theme-bg').value;
             adminData.theme.accentColor = document.getElementById('theme-accent').value;
             adminData.theme.featureColor = document.getElementById('theme-feature').value;
             
-            // Advanced JSONs (Wrapped in Try/Catch so it doesn't break if you make a typo)
             try {
                 const processInput = document.getElementById('process-json').value;
                 if (processInput) adminData.process_steps = JSON.parse(processInput);
                 
                 const featuresInput = document.getElementById('features-json').value;
                 if (featuresInput) adminData.why_choose_me = JSON.parse(featuresInput);
-                
-                const testiInput = document.getElementById('testimonials-json').value;
-                if (testiInput) adminData.testimonials = JSON.parse(testiInput);
             } catch (e) {
                 console.warn("Skipped saving JSON arrays due to formatting error.");
             }
         }
 
         async function saveData() {
-            syncFormsToData(); // Always pull latest screen data before saving
+            syncFormsToData(); 
             
             try {
                 const response = await fetch('/api/data', {
@@ -294,12 +310,57 @@
                 if(response.ok) {
                     showNotification();
                     document.getElementById('stat-proj').innerText = adminData.portfolio.length;
-                    // Update JSON box to reflect any new portfolio additions
                     populateForms(); 
                 } else throw new Error("Failed to save");
             } catch (error) {
                 alert("Failed to save data globally!");
             }
+        }
+
+        // --- REVIEW MANAGER LOGIC --- //
+        function renderAdminReviews() {
+            const container = document.getElementById('admin-reviews-list');
+            container.innerHTML = '';
+            
+            if(adminData.testimonials.length === 0) {
+                container.innerHTML = '<p style="color:#666;">No live reviews currently displayed.</p>';
+                return;
+            }
+
+            adminData.testimonials.forEach((t, index) => {
+                container.innerHTML += `
+                    <div style="border:1px solid var(--border); padding:20px; border-radius:8px; margin-bottom:15px; background:#fff; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="padding-right:20px;">
+                            <h4 style="color:var(--accent); margin-bottom:8px; font-size:1.2rem;">${t.name}</h4>
+                            <p style="font-size:0.95rem; font-style:italic; line-height:1.5;">"${t.text}"</p>
+                        </div>
+                        <button class="delete-btn" style="margin:0; padding:10px 15px; height:fit-content; white-space:nowrap;" onclick="deleteReview(${index})">🗑️ Delete</button>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteReview(index) {
+            if(confirm("Are you sure you want to permanently delete this review from the website?")) {
+                adminData.testimonials.splice(index, 1);
+                renderAdminReviews();
+                saveData();
+            }
+        }
+
+        function addReview() {
+            const name = document.getElementById('new-review-name').value.trim();
+            const text = document.getElementById('new-review-text').value.trim();
+            
+            if(!name || !text) return alert("Please fill out both the Name and the Review text!");
+            
+            adminData.testimonials.unshift({ name: name, text: text });
+            
+            document.getElementById('new-review-name').value = '';
+            document.getElementById('new-review-text').value = '';
+            
+            renderAdminReviews();
+            saveData();
         }
 
         // --- PORTFOLIO MANAGER --- //
@@ -345,7 +406,6 @@
         }
 
         function openEditModal(id) {
-            // Force strict string matching to prevent ID dropping
             const item = adminData.portfolio.find(i => String(i.id) === String(id));
             if(!item) return alert("Could not load item details.");
             
@@ -402,7 +462,7 @@
             const newItem = { id: newId, title: title, category: category, image: url };
             if(ratio !== 'auto') newItem.ratio = ratio;
 
-            adminData.portfolio.unshift(newItem); // Adds to top
+            adminData.portfolio.unshift(newItem); 
             
             document.getElementById('new-title').value = '';
             document.getElementById('new-category').value = '';
@@ -421,7 +481,7 @@
             }
         }
 
-        // --- POPULATE OTHER FORMS --- //
+        // --- GENERAL LOGIC --- //
         function populateForms() {
             if(!adminData.hero) return;
             document.getElementById('stat-proj').innerText = adminData.portfolio.length;
@@ -431,10 +491,8 @@
             document.getElementById('about-bio').value = adminData.about.bio || '';
             document.getElementById('about-avatar').value = adminData.about.avatar || '';
             
-            // We still update these text areas just in case you want to use them
             document.getElementById('process-json').value = JSON.stringify(adminData.process_steps || [], null, 2);
             document.getElementById('features-json').value = JSON.stringify(adminData.why_choose_me || [], null, 2);
-            document.getElementById('testimonials-json').value = JSON.stringify(adminData.testimonials || [], null, 2);
             
             document.getElementById('social-discord').value = adminData.social.discord || '';
             document.getElementById('social-instagram').value = adminData.social.instagram || '';
